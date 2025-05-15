@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wenxin Yiyan Free AI Assistant - Get intelligent responses to your questions powered by Baidu's advanced language model without login requirements.">
+    <meta name="keywords" content="Wenxin Yiyan, AI assistant chat, no login AI, Baidu AI, language model, AI communication">
+    <title>Wenxin Yiyan Free AI Assistant (No Login Required)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23007BFF'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-size='50' fill='%23FFD600' font-family='Arial' dy='.3em'%3E%E2%98%85%3C/text%3E%3C/svg%3E">
+    <script>
+        // 记录当前页面是首页
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                localStorage.setItem('lastPageVisited', 'index');
+                console.log('Set current page as index page');
+            } catch (e) {
+                console.error('Error recording current page:', e);
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">Wenxin Yiyan</div>
+        <nav>
+            <button id="loginButton">Login</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero-background">
+            <div class="container">
+                <section class="intro-section">
+                    <h1>Wenxin Yiyan Free AI Assistant</h1>
+                    <p class="tagline">
+                        🚀 Powered by Baidu's advanced AI model - no login required!<br>
+                        Ask questions, get help with writing, research, and more.
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <div class="container">
+            <section class="suggestions-area">
+                <div class="suggestions-header">
+                    <h2>You can try asking me:</h2>
+                    <button id="refreshPrompts">🔄 Refresh </button>
+                </div>
+                <div class="suggestions-container">
+                    <div class="suggestions-grid">
+                        <article class="suggestion-card">
+                            <h3>India-Pakistan Relations</h3>
+                            <p>Have there been any new military confrontations or diplomatic incidents between India and Pakistan recently?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Military Technology</h3>
+                            <p>Did India really successfully interfere with Pakistan's Chinese-made air defense systems, and how does this affect the regional military balance?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Ceasefire Analysis</h3>
+                            <p>How has the international community responded to the sudden ceasefire between India and Pakistan, and has this move truly sparked discontent among hardliners in India?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Global Trade Agreements</h3>
+                            <p>Which specific clauses in the new trade agreement between the US and UK have been labeled as "poison pills" by China, and how will this affect the global trade landscape?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>US-China Tariffs</h3>
+                            <p>What is the specific reduction in tariffs on small parcels from mainland China and Hong Kong by US President Trump, and what are the reasons behind it?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>US-China Trade Truce</h3>
+                            <p>What preliminary results or new negotiation focuses have emerged from the 90-day tariff truce between the US and China?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Middle East Diplomacy</h3>
+                            <p>Which interim Syrian leader did former US President Trump meet in Saudi Arabia, and what key issues were discussed?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Qatar-US Economic Ties</h3>
+                            <p>Which industry sectors are the main focus of the $1.2 trillion economic cooperation agreement discussed during Trump's visit to Qatar?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>US Middle East Strategy</h3>
+                            <p>Does this signal a new diplomatic strategy adjustment or policy priorities for the US in the Middle East region?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Russia-Ukraine Peace Talks</h3>
+                            <p>When are the direct peace negotiations between Russia and Ukraine to be hosted by Turkey expected to take place, and what are the main issues and expected outcomes?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Peace Mediation Efforts</h3>
+                            <p>What is the international community's view on these mediation efforts for Russia-Ukraine peace talks, and which countries or organizations are involved?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Emerging AI Tools</h3>
+                            <p>In the field of artificial intelligence, besides voice removers and coding assistants, what emerging AI tools are showing explosive growth trends?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Language Models</h3>
+                            <p>What are the latest breakthroughs in large language models (like Claude AI, GPT series) in understanding complex instructions and multimodal interactions?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>AI Industry Trends</h3>
+                            <p>Do layoffs in AI departments by tech giants like Microsoft reflect industry bubbles or strategic adjustments, and how do they impact the AI talent market?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Quantum Computing</h3>
+                            <p>Have there been any new prototype machines released in quantum computing or key progress made in solving practical problems?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Metaverse Development</h3>
+                            <p>What new platforms or case studies in metaverse technology for business applications and user experience will be worth attention in 2025?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Semiconductor Diversification</h3>
+                            <p>Besides India's development plans, what are the latest trends in diversification and localization of global chip supply chains in the semiconductor industry?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>China's Chip Technology</h3>
+                            <p>What new progress has China made in overcoming bottlenecks in high-end chip manufacturing?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Commercial Space</h3>
+                            <p>How is the global coverage and competitive landscape for low-orbit satellite internet services like Starlink in the commercial space sector?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Space Exploration</h3>
+                            <p>What are the new dynamics in cooperation and competition among countries in space resource mining and space station construction?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>TikTok Data Privacy</h3>
+                            <p>For what specific data transfer or processing violations did the Irish data protection authority impose a heavy fine on TikTok?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Crypto Regulations</h3>
+                            <p>Why did the US Treasury suddenly decide to lift sanctions on the cryptocurrency mixer Tornado Cash, and what considerations lie behind this?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Cybersecurity Incidents</h3>
+                            <p>What major cyber attacks or data breaches targeting critical infrastructure or large enterprises have occurred globally in recent times?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Deepfake Regulations</h3>
+                            <p>As deepfake technology becomes increasingly sophisticated, what new measures are countries taking in legislative regulation and technical countermeasures?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Digital Identity</h3>
+                            <p>What new application explorations are there in digital identity and decentralized identity (DID) technology to protect user privacy and data sovereignty?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>US-Qatar Economic Deal</h3>
+                            <p>How will the massive economic agreement between the US and Qatar be specifically implemented, and what impact will it have on international energy markets and investment flows?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>India's Manufacturing Growth</h3>
+                            <p>What interim results has India achieved in attracting foreign investment and fostering domestic enterprises under its "Make in India" and semiconductor development plans?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Sanofi's US Investment</h3>
+                            <p>Does Sanofi's $20 billion investment plan in the US include research and development centers in addition to production facilities?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Global Inflation Trends</h3>
+                            <p>What are the current core inflation rates and future interest rate policy directions of major economies?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Digital Currencies</h3>
+                            <p>What are the latest developments in central bank digital currencies (CBDCs) research and pilot projects, and when are they expected to launch on a large scale?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>ESG Investment Outlook</h3>
+                            <p>What new challenges and opportunities will Environmental, Social, and Governance (ESG) investment concepts face in 2025, and are disclosure standards becoming more unified?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Real Estate Market Trends</h3>
+                            <p>What are the trends in commercial property vacancy rates and residential prices in the global real estate market, especially in major international cities?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Renewable Energy Growth</h3>
+                            <p>What significant changes occurred in global renewable energy (such as solar and wind) installed capacity and generation share in the first half of 2025?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Carbon Capture Technology</h3>
+                            <p>What new breakthrough projects are emerging in the commercial application of Carbon Capture, Utilization and Storage (CCUS) technology across countries?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Climate Change Policies</h3>
+                            <p>How is the development of international carbon emission trading markets and the implementation of Carbon Border Adjustment Mechanism (CBAM) progressing in addressing climate change?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Electric Vehicle Innovation</h3>
+                            <p>What are the latest hotspots in the electric vehicle (EV) market regarding charging infrastructure, battery technology innovation (such as solid-state batteries), and market competition?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Sustainable Aviation</h3>
+                            <p>How is the progress of Sustainable Aviation Fuel (SAF) research, development, and commercial application under the aviation industry's emission reduction goals?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Pharmaceutical Research</h3>
+                            <p>Besides Sanofi's investment, what new developments are occurring among global pharmaceutical giants in orphan drug development and gene therapy?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>mRNA Technology Applications</h3>
+                            <p>What new progress has been made in applying mRNA technology to vaccine development, cancer treatment, and other fields?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Pandemic Preparedness</h3>
+                            <p>How is the progress on global prevention and response mechanisms for the next pandemic, such as international treaty development and rapid response platform construction?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>AI in Healthcare</h3>
+                            <p>What successful cases are there in applying artificial intelligence to medical imaging diagnostics, new drug discovery, and personalized treatment planning?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Hong Kong Retail Challenges</h3>
+                            <p>What are the main challenges facing Hong Kong's retail industry currently, and what self-help measures have businesses taken besides rent discounts?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>UK Immigration Policy</h3>
+                            <p>How might the UK's tightened immigration policy specifically affect Hong Kong residents' Mandatory Provident Fund (MPF) withdrawals and capital flows?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Pope Leo XIV's Vision</h3>
+                            <p>What important views has the newly elected American Pope Leo XIV expressed on promoting interfaith dialogue and addressing global social issues?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Singapore's Political Direction</h3>
+                            <p>What are the priority livelihood policies and economic development plans that the People's Action Party (PAP) will promote in its new term after Singapore's general election?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Gig Economy Protection</h3>
+                            <p>What new legislative developments are there globally regarding the protection of gig economy workers' rights and platform responsibilities?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Digital Nomad Lifestyle</h3>
+                            <p>How widespread is the "digital nomad" lifestyle globally, and which countries or cities have introduced new visas or supportive policies?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Streaming Media Competition</h3>
+                            <p>Has the "streaming platform war" entered a new phase in the film and entertainment industry, and what new characteristics are emerging in content creation and IP licensing competition?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Esports Industry Growth</h3>
+                            <p>What developments occurred in 2025 regarding the global tournament system, commercial operations, and mainstream social recognition of the esports industry?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Healthy Meal Planning</h3>
+                            <p>What are some easy and nutritious meal prep ideas for busy professionals who want to maintain a balanced diet?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Home Gardening Tips</h3>
+                            <p>How can I start a small vegetable garden on my apartment balcony with limited space and sunlight?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Financial Literacy</h3>
+                            <p>What are the essential financial skills young adults should develop to manage their personal finances effectively?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Remote Work Balance</h3>
+                            <p>How can I maintain work-life boundaries while working from home long-term?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Digital Detox Strategies</h3>
+                            <p>What practical methods can help reduce screen time and digital dependency in daily life?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Sustainable Living</h3>
+                            <p>What are some simple ways to reduce household waste and adopt more eco-friendly habits?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Mental Wellness Practices</h3>
+                            <p>What daily mindfulness exercises can help manage stress and anxiety in a busy lifestyle?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Home Organization</h3>
+                            <p>What are effective decluttering methods for small living spaces that can be maintained long-term?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Hobby Exploration</h3>
+                            <p>What affordable and fulfilling hobbies would you recommend for someone looking to develop new skills and interests?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Easy Home Cooking</h3>
+                            <p>What are some simple yet impressive recipes for beginners that require minimal cooking equipment?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Budget Travel Planning</h3>
+                            <p>How can I plan an affordable weekend getaway while maximizing experiences on a limited budget?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Understanding Deep Learning</h3>
+                            <p>How can the principles of deep learning in artificial intelligence be explained in simple terms?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Blockchain in Finance</h3>
+                            <p>What disruptive impacts might blockchain technology have on the financial industry?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Cardiovascular Disease Prevention</h3>
+                            <p>Please list 5 daily measures to prevent cardiovascular disease.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>CRISPR Ethics</h3>
+                            <p>What are the main ethical controversies surrounding CRISPR gene editing technology?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Online vs. Traditional Education</h3>
+                            <p>Comparative analysis of the advantages and disadvantages of online education versus traditional classroom learning.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Children's Programming Education</h3>
+                            <p>How to design introductory programming courses suitable for 6-8 year old children?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Fed Rate Hikes Impact</h3>
+                            <p>What do Federal Reserve interest rate increases mean for emerging market countries?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Anti-Inflation Investment</h3>
+                            <p>How can ordinary people build an investment portfolio that resists inflation?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Online Copyright Infringement</h3>
+                            <p>What are the three core elements in determining online copyright infringement?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Rental Contract Tips</h3>
+                            <p>Which clauses should receive special attention when signing a residential lease agreement?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Color Psychology in Design</h3>
+                            <p>How can color psychology be used to enhance the visual impact of graphic design works?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Impressionism in Digital Art</h3>
+                            <p>Analysis of how Impressionist painting has influenced modern digital art.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Manufacturing and Carbon Neutrality</h3>
+                            <p>What transformation pressures does traditional manufacturing face under carbon neutrality goals?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Biodiversity Banking</h3>
+                            <p>Explain the ecological compensation mechanism of "biodiversity banking."</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Beijing Cultural Tour</h3>
+                            <p>Design a three-day in-depth cultural tour of Beijing (including lesser-known attractions).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Post-Pandemic Tourism</h3>
+                            <p>What structural changes might emerge in international tourism in the post-pandemic era?</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Summer Haiku</h3>
+                            <p>Create a haiku (three lines, 5-7-5 syllables) on the theme of summer cicadas and solitude.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Modern Poetry</h3>
+                            <p>Create a free-form modern poem (at least 4 stanzas) using "time fracture" as imagery.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Classical-Style AI Poem</h3>
+                            <p>Write a seven-character quatrain in the style of Li Shangyin, metaphorically alluding to the awakening of artificial intelligence.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Quantum Entanglement Sonnet</h3>
+                            <p>Create a sonnet (ABAB CDCD EFEF GG rhyme scheme) on the theme of quantum entanglement and love.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Mirror World Palindrome</h3>
+                            <p>Create a palindrome poem (can be read backwards) revolving around the "world in the mirror."</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Flash Fiction</h3>
+                            <p>Write a 100-word micro-story with a twist ending, using keywords: old pocket watch, rainy night, anonymous letter.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>AI Judge Fiction</h3>
+                            <p>Design 3 tension-filled courtroom dialogue exchanges with the background of "AI judge trying humans."</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Cyberpunk Fable</h3>
+                            <p>Generate a cyberpunk-style fable with the central conflict: memory uploads vs. preservation of humanity.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Post-Apocalyptic Discovery</h3>
+                            <p>Using second-person perspective, describe a character discovering living plants in post-apocalyptic ruins.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Fantasy Character Card</h3>
+                            <p>Create a three-line character setting card for a fantasy world (race/ability/fatal weakness).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Black Hole Paradox Lyrics</h3>
+                            <p>Interpret the "black hole information paradox" in song lyrics form (chorus must include metaphor and repetitive rhetoric).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Philosophical Debate</h3>
+                            <p>Generate philosophical debate dialogue: Zhuangzi vs. Einstein discussing "relativity theory and carefree wandering."</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Parallel Universe Cafe</h3>
+                            <p>Using montage technique, describe "five parallel universe scenes happening simultaneously in a cafe."</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Immersive Theater Design</h3>
+                            <p>Design a narrative clue with olfactory trigger points for immersive theater (e.g., perfume→memory flashback).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Poetry Revision Directions</h3>
+                            <p>Provide three revision directions (absurdism/minimalism/gothicization) for a poem.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Sci-Fi Inspiration</h3>
+                            <p>List 10 "what if" questions to inspire science fiction (e.g., what if pain could be stored and traded?).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Shakespeare for TikTok</h3>
+                            <p>Adapt Hamlet's classic "To be or not to be" soliloquy into TikTok-style short video copy.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Unconventional Story Openings</h3>
+                            <p>Generate 5 unconventional "first sentences" for stories (requirement: include contradictory elements).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Quantum Poetry</h3>
+                            <p>Create a "quantum poem": the same text presents two opposite meanings when read in different orders.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Mathematical Love Poem</h3>
+                            <p>Write a love poem using mathematical formula structure (mixing symbols and words allowed).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Interactive Fiction</h3>
+                            <p>Generate interactive text: each time the reader chooses an option, the story splits into new branches.</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>Installation Art Concept</h3>
+                            <p>Design an installation art description that requires audience participation to be complete (with interactive trigger mechanisms).</p>
+                        </article>
+                        <article class="suggestion-card">
+                            <h3>AI Self-Critique</h3>
+                            <p>Write "AI-generated AI critique poetry" with each line containing self-referential paradox.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- New response container above the input -->
+    <div class="response-container" id="responseContainer"></div>
+
+    <footer class="input-area-footer">
+        <div class="input-container">
+            <textarea id="userInput" placeholder="Ask me anything..." rows="1"></textarea>
+            <button id="sendButton" title="Send">➤</button> 
+        </div>
+        <p class="site-footer-text keyboard-shortcut">
+            <span class="keyboard-shortcut-badge">⌨️ Use Ctrl+Enter to send</span>
+        </p>
+        <div class="site-footer">
+            <div class="footer-links">
+                <a href="mailto:contact@aiassistant.com">Contact Us: ytsgabcde20@2925.com</a> • 
+                <a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023003198号-90</a>
+            </div>
+            <p class="site-footer-text">
+                <a href="/privacy-policy.html">Privacy Policy</a> • 
+                AI Assistant Platform © <span id="currentYear"></span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // 设置当前年份
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 

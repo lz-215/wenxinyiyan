@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wenxin Yiyan Free AI Assistant - Get intelligent responses to your questions powered by Baidu's advanced language model without login requirements.">
+    <meta name="keywords" content="Wenxin Yiyan, AI assistant chat, no login AI, Baidu AI, language model, AI communication">
+    <title>Wenxin Yiyan Free AI Assistant (No Login Required)</title>
+    <link rel="stylesheet" href="chat-style.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23007BFF'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-size='50' fill='%23FFD600' font-family='Arial' dy='.3em'%3E%E2%98%85%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <header>
+        <div class="logo">Wenxin Yiyan</div>
+        <nav>
+            <button id="homeButton">Home</button>
+            <button id="loginButton">Login</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>Wenxin Yiyan Free AI Assistant</h1>
+                <button id="newChatButton">New Chat</button>
+            </div>
+            
+            <div class="conversation-container">
+                <div class="message-wrapper user-message-wrapper">
+                    <div class="user-avatar">
+                        <img src="assets/images/user.png" alt="User Avatar">
+                    </div>
+                    <div class="message user-message">
+                        <div id="userQuestion" class="message-content"></div>
+                    </div>
+                </div>
+                
+                <div class="message-wrapper ai-message-wrapper">
+                    <div class="ai-avatar">
+                        <img src="assets/images/favicon.png" alt="AI Avatar">
+                    </div>
+                    <div class="message ai-message">
+                        <div id="responseText" class="message-content">
+                            <p class="api-placeholder">Loading response...</p>
+                            <p class="api-placeholder">In a production environment, this would display the AI-generated response based on your query.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="input-area-footer">
+        <div class="input-container">
+            <textarea id="userInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
+            <button id="sendButton" title="Send">➤</button> 
+        </div>
+        <p class="site-footer-text keyboard-shortcut">
+            <span class="keyboard-shortcut-badge">⌨️ Use Ctrl+Enter to send</span>
+        </p>
+        <div class="site-footer">
+            <div class="footer-links">
+                <a href="mailto:contact@aiassistant.com">Contact Us: ytsgabcde20@2925.com</a> • 
+                <a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023003198号-90</a>
+            </div>
+            <p class="site-footer-text">
+                <a href="/privacy-policy.html">Privacy Policy</a> • 
+                AI Assistant Platform © <span id="currentYear"></span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="chat.js"></script>
+    <script>
+        // 设置当前年份
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 
