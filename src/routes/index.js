@@ -4,7 +4,7 @@ const qwenRoutes = require('./qwenRoutes');
 const router = express.Router();
 
 // API接口前缀
-router.use('/api/qwen', qwenRoutes);
+router.use('/qwen', qwenRoutes);
 
 // 健康检查接口
 router.get('/health', (req, res) => {

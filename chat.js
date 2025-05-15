@@ -690,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentApiController = new AbortController();
             const signal = currentApiController.signal;
             
-            const response = await fetch('http://localhost:3000/api/qwen/chat', {
+            const response = await fetch('/api/qwen/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
