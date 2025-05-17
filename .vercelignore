@@ -1,0 +1,9 @@
+README.md
+.git
+node_modules
+.env
+.env.example
+VERCEL_DEPLOYMENT.md
+VERCEL_WEB_DEPLOYMENT.md
+deploy.js
+deploy.bat

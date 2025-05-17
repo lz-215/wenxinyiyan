@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (userInput) {
         userInput.addEventListener('input', autoResizeTextarea);
-        
+
         setTimeout(autoResizeTextarea, 0);
-        
+
         setTimeout(() => userInput.focus(), 500);
     }
 
@@ -29,21 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = (userInput.scrollHeight) + 'px';
     }
 
-    if (loginButton) {
-        loginButton.addEventListener('click', () => {
-            setButtonLoading(loginButton, true);
-            
-            setTimeout(() => {
-                setButtonLoading(loginButton, false);
-                alert('Login functionality will be implemented with actual API integration.');
-            }, 1000);
-        });
-    }
+    // 登录按钮点击事件已在login-modal.js中处理
+    // 这里不再添加额外的点击事件处理
 
     if (refreshPromptsButton) {
         refreshPromptsButton.addEventListener('click', () => {
             setButtonLoading(refreshPromptsButton, true);
-            
+
             setTimeout(() => {
                 setButtonLoading(refreshPromptsButton, false);
                 shuffleAndDisplayCards();
@@ -73,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     suggestionCards.forEach(card => {
         card.addEventListener('click', () => {
             card.classList.add('active');
-            
+
             setTimeout(() => {
                 card.classList.remove('active');
                 const question = card.querySelector('p')?.textContent || card.querySelector('h3')?.textContent;
@@ -87,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function sendMessage() {
         if (!userInput) return;
-        
+
         const message = userInput.value.trim();
         if (message) {
             // 将用户输入重定向到chat.html页面，并传递查询参数
@@ -97,17 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => userInput.classList.remove('shake'), 500);
         }
     }
-    
+
     // Add a message to the chat history
     function addMessageToChat(role, content) {
         conversationHistory.push({ role, content });
-        
+
         const messageElement = document.createElement('div');
         messageElement.className = `chat-message ${role}`;
         messageElement.innerHTML = `<p>${role === 'user' ? content : formatAIResponse(content)}</p>`;
-        
+
         chatMessages.appendChild(messageElement);
-        
+
         // Scroll to bottom of chat
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -123,9 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setButtonLoading(button, isLoading) {
         if (!button) return;
-        
+
         const originalContent = button.getAttribute('data-original-content') || button.innerHTML;
-        
+
         if (isLoading) {
             button.setAttribute('data-original-content', originalContent);
             button.disabled = true;
@@ -136,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 调用通义千问API的函数
-    async function callQwenApi(prompt) {
+    // 调用GPT4.1 API的函数
+    async function callGPT41Api(prompt) {
         try {
-            console.log(`Calling Qwen API with prompt: ${prompt}`);
-            
-            const response = await fetch('http://localhost:3000/api/qwen/chat', {
+            console.log(`Calling GPT4.1 API with prompt: ${prompt}`);
+
+            const response = await fetch('/api/qwen/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }),
             });
-            
+
             if (!response.ok) {
                 // Try to parse error message
                 let errorData;
@@ -166,16 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 throw new Error(`HTTP Error! Status: ${response.status}${errorData && errorData.message ? ' - ' + errorData.message : ''}`);
             }
-            
+
             const result = await response.json();
-            console.log('Qwen API Response:', result);
+            console.log('GPT4.1 API Response:', result);
             return result;
-            
+
         } catch (error) {
-            console.error('Error calling Qwen API:', error);
-            return { 
-                success: false, 
-                error: error.message || "Unable to connect to backend service. Please try again later." 
+            console.error('Error calling GPT4.1 API:', error);
+            return {
+                success: false,
+                error: error.message || "Unable to connect to backend service. Please try again later."
             };
         }
     }
@@ -184,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function callApi(endpoint, data) {
         try {
             console.log(`Calling backend API: ${endpoint} with data:`, data);
-            
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -192,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(data),
             });
-            
+
             if (!response.ok) {
                 // Try to parse error from backend if available
                 let errorData;
@@ -203,17 +195,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 throw new Error(`HTTP error! status: ${response.status}${errorData && errorData.error ? ' - ' + errorData.error : ''}`);
             }
-            
+
             const result = await response.json();
             console.log('Backend API Response:', result);
             return result; // Expecting backend to return something like { reply: "AI response" }
-            
+
         } catch (error) {
             console.error('Error calling backend API:', error);
             // Return a structured error that sendMessage can handle
-            return { 
-                success: false, 
-                error: error.message || "Failed to communicate with the backend. Please try again later." 
+            return {
+                success: false,
+                error: error.message || "Failed to communicate with the backend. Please try again later."
             };
         }
     }
@@ -222,14 +214,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function shuffleAndDisplayCards() {
         const allCards = Array.from(suggestionCards);
         const suggestionsGrid = document.querySelector('.suggestions-grid');
-        
+
         // 淡出效果
         suggestionsGrid.style.opacity = '0';
-        
+
         setTimeout(() => {
             // 随机打乱所有卡片
             const shuffledCards = allCards.sort(() => Math.random() - 0.5);
-            
+
             // 先隐藏所有卡片
             allCards.forEach(card => {
                 card.style.display = 'none';
@@ -240,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.classList.remove(`icon-${i}`);
                 }
             });
-            
+
             // 只显示前6个
             shuffledCards.slice(0, 6).forEach((card, index) => {
                 card.style.display = '';
@@ -252,13 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.style.animation = `cardFadeIn 0.5s ease forwards ${index * 0.1}s`;
                 }, 10);
             });
-            
+
             // 淡入效果
             suggestionsGrid.style.opacity = '1';
             suggestionsGrid.style.transition = 'opacity 0.5s ease';
         }, 300);
     }
-    
+
     // 页面加载时初始化显示
     shuffleAndDisplayCards();
 
@@ -269,4 +261,4 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add(`icon-${randomIconNum}`);
         });
     }
-}); 
+});

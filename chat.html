@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Wenxin Yiyan Free AI Assistant - Get intelligent responses to your questions powered by Baidu's advanced language model without login requirements.">
-    <meta name="keywords" content="Wenxin Yiyan, AI assistant chat, no login AI, Baidu AI, language model, AI communication">
+    <meta name="description" content="GPT4.1 Free AI Assistant - Get intelligent responses to your questions powered by advanced language model without login requirements.">
+    <meta name="keywords" content="GPT4.1, AI assistant chat, no login AI, AI, language model, AI communication">
     <meta name="google-site-verification" content="xtMVfXot4viFkyWp0PwsT2JNbuflfnhDsfRQrthOz6o" />
-    <title>Wenxin Yiyan Free AI Assistant (No Login Required)</title>
+    <title>GPT4.1 Free AI Assistant (No Login Required)</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q83YN5TWCD"></script>
     <script>
@@ -21,7 +21,12 @@
 </head>
 <body>
     <header>
-        <div class="logo">Wenxin Yiyan</div>
+        <a href="index.html" class="logo-link">
+            <div class="logo">
+                <img src="assets/images/chatgpt.png" alt="Logo" width="32" height="32">
+                <span>GPT4.1</span>
+            </div>
+        </a>
         <nav>
             <button id="homeButton">Home</button>
             <button id="loginButton">Login</button>
@@ -31,10 +36,10 @@
     <main>
         <div class="chat-container">
             <div class="chat-header">
-                <h1>Wenxin Yiyan Free AI Assistant</h1>
+                <h1>GPT4.1 Free AI Assistant</h1>
                 <button id="newChatButton">New Chat</button>
             </div>
-            
+
             <div class="conversation-container">
                 <div class="message-wrapper user-message-wrapper">
                     <div class="user-avatar">
@@ -44,10 +49,10 @@
                         <div id="userQuestion" class="message-content"></div>
                     </div>
                 </div>
-                
+
                 <div class="message-wrapper ai-message-wrapper">
                     <div class="ai-avatar">
-                        <img src="assets/images/favicon.png" alt="AI Avatar">
+                        <img src="assets/images/chatgpt.png" alt="AI Avatar" width="32" height="32">
                     </div>
                     <div class="message ai-message">
                         <div id="responseText" class="message-content">
@@ -62,28 +67,67 @@
 
     <footer class="input-area-footer">
         <div class="input-container">
-            <textarea id="userInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
-            <button id="sendButton" title="Send">➤</button> 
-        </div>
-        <p class="site-footer-text keyboard-shortcut">
-            <span class="keyboard-shortcut-badge">⌨️ Use Ctrl+Enter to send</span>
-        </p>
-        <div class="site-footer">
-            <div class="footer-links">
-                <a href="mailto:contact@aiassistant.com">Contact Us: ytsgabcde20@2925.com</a> • 
-                <a href="https://beian.miit.gov.cn" target="_blank">渝ICP备2023003198号-90</a>
+            <div class="input-area">
+                <textarea id="userInput" placeholder="Type your message here... Press Ctrl+Enter to send" rows="1"></textarea>
+                <button id="sendButton" title="Send">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                    </svg>
+                </button>
             </div>
-            <p class="site-footer-text">
-                <a href="/privacy-policy.html">Privacy Policy</a> • 
-                AI Assistant Platform © <span id="currentYear"></span>
-            </p>
+        </div>
+        <div class="site-footer">
+            <p>Contact Us: ytsgabcde20@2925.com • 渝ICP备2023003198号-90</p>
+            <p>Content is AI-generated, accuracy and truthfulness cannot be guaranteed, for reference only • <a href="privacy-policy.html" style="color: #007bff; text-decoration: none;">Privacy Policy</a></p>
         </div>
     </footer>
 
     <script src="chat.js"></script>
-    <script>
-        // 设置当前年份
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+    <script src="login-modal.js"></script>
+
+    <!-- Login Modal -->
+    <div class="modal-backdrop" id="loginModal">
+        <div class="login-modal">
+            <div class="modal-header">
+                <div class="modal-tabs">
+                    <div class="modal-tab">Account Login</div>
+                    <div class="modal-tab active">SMS Login</div>
+                </div>
+                <button class="close-modal" id="closeLoginModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="login-description">Please verify your mobile number to sign in</p>
+                <form class="login-form" id="loginForm">
+                    <div class="phone-input-group">
+                        <div class="country-code">
+                            <div class="country-code-selector">
+                                <span>+86</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <input type="tel" class="phone-input" placeholder="Enter phone number" id="phoneInput">
+                    </div>
+
+                    <div class="verification-group">
+                        <input type="text" class="verification-input" placeholder="Verification code" id="verificationInput">
+                        <button type="button" class="verification-button" id="sendVerificationBtn">Send code</button>
+                    </div>
+
+                    <button type="submit" class="login-button" id="loginSubmitBtn" disabled>Login</button>
+
+                    <div class="consent-checkbox">
+                        <input type="checkbox" id="consentCheckbox">
+                        <label for="consentCheckbox">I have read and agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                </form>
+
+                <div class="register-link">
+                    <a href="#">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-</html> 
+</html>

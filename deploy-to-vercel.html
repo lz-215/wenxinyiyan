@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy to Vercel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #0070f3;
+            text-align: center;
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eaeaea;
+            border-radius: 5px;
+        }
+        .step h2 {
+            margin-top: 0;
+            color: #0070f3;
+        }
+        .env-var {
+            background-color: #f6f6f6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #0070f3;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .note {
+            background-color: #fffde7;
+            padding: 10px;
+            border-left: 4px solid #ffd600;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Deploy Your GPT4.1 Project to Vercel</h1>
+    
+    <div class="step">
+        <h2>Step 1: Prepare Your Project</h2>
+        <p>Your project is already configured with the necessary files for Vercel deployment:</p>
+        <ul>
+            <li><code>vercel.json</code> with build and route configurations</li>
+            <li>Environment variables in the <code>.env</code> file</li>
+        </ul>
+    </div>
+    
+    <div class="step">
+        <h2>Step 2: Create a ZIP Archive</h2>
+        <p>Create a ZIP file of your project:</p>
+        <ol>
+            <li>Select all files in your project directory</li>
+            <li>Right-click and select "Send to" > "Compressed (zipped) folder"</li>
+            <li>Name the ZIP file (e.g., "gpt41-project.zip")</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h2>Step 3: Go to Vercel Dashboard</h2>
+        <p>Access the Vercel dashboard to start the deployment process:</p>
+        <a href="https://vercel.com/dashboard" target="_blank" class="button">Open Vercel Dashboard</a>
+        <p>Log in with your Vercel account (or create one if you don't have it)</p>
+    </div>
+    
+    <div class="step">
+        <h2>Step 4: Import Your Project</h2>
+        <ol>
+            <li>Click on the "Add New..." button and select "Project"</li>
+            <li>In the "Import Git Repository" section, click on "Upload" at the bottom</li>
+            <li>Select the ZIP file you created in Step 2</li>
+            <li>Click "Open" to upload your project</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h2>Step 5: Configure Project Settings</h2>
+        <ol>
+            <li>Project Name: Enter a name for your project (e.g., "gpt41-assistant")</li>
+            <li>Framework Preset: Select "Other" since we have a custom configuration</li>
+            <li>Root Directory: Keep as default (/)</li>
+            <li>Build and Output Settings: Leave as default (configured in vercel.json)</li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h2>Step 6: Configure Environment Variables</h2>
+        <p>Add the following environment variables:</p>
+        <div class="env-var">QWEN_API_KEY: sk-c78ff1c1f9dc469992497b2b678f8657</div>
+        <div class="env-var">QWEN_API_URL: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation</div>
+        <div class="env-var">NODE_ENV: production</div>
+    </div>
+    
+    <div class="step">
+        <h2>Step 7: Deploy</h2>
+        <ol>
+            <li>Click the "Deploy" button</li>
+            <li>Wait for the deployment to complete (usually takes 1-2 minutes)</li>
+            <li>Once deployed, Vercel will provide you with a URL to access your application</li>
+        </ol>
+    </div>
+    
+    <div class="note">
+        <p><strong>Note:</strong> If you encounter any issues during deployment, refer to the <code>VERCEL_DEPLOYMENT_GUIDE.md</code> file for troubleshooting tips.</p>
+    </div>
+    
+    <div class="step">
+        <h2>After Deployment</h2>
+        <ol>
+            <li>Visit the provided Vercel URL to ensure your application is working correctly</li>
+            <li>Test the chat functionality to confirm API integration is working</li>
+            <li>Optionally, add a custom domain in the Vercel project settings</li>
+        </ol>
+    </div>
+</body>
+</html>

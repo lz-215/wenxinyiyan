@@ -40,6 +40,8 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "QWEN_API_KEY": "sk-c78ff1c1f9dc469992497b2b678f8657",
+    "QWEN_API_URL": "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
   }
-} 
+}

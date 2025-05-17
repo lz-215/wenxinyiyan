@@ -1,6 +1,6 @@
-# 通义千问API后端服务
+# GPT4.1 API服务
 
-这是一个基于Node.js和Express的后端服务，用于调用阿里云通义千问(Qwen Plus)大语言模型API，提供简单易用的接口给前端或其他服务使用。
+这是一个基于Node.js和Express的后端服务，用于调用GPT4.1大语言模型API，提供简单易用的接口给前端或其他服务使用。
 
 ## 功能特点
 
@@ -15,7 +15,7 @@
 ### 前提条件
 
 - Node.js 14.x 或更高版本
-- 通义千问API密钥 (从阿里云获取)
+- GPT4.1 API密钥
 
 ### 安装步骤
 
@@ -37,12 +37,12 @@ npm install
 创建`.env`文件并填入以下内容：
 
 ```
-QWEN_API_KEY=your_api_key_here
-QWEN_API_URL=https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+GPT_API_KEY=your_api_key_here
+GPT_API_URL=your_api_url_here
 PORT=3000
 ```
 
-请将`your_api_key_here`替换为您的实际API密钥。
+请将`your_api_key_here`和`your_api_url_here`替换为您的实际API密钥和URL。
 
 4. 启动服务
 
@@ -144,7 +144,7 @@ async function callQwenAPI() {
       }
     }),
   });
-  
+
   const data = await response.json();
   return data;
 }
@@ -154,13 +154,28 @@ callQwenAPI().then(data => console.log(data));
 
 ## 生产环境部署
 
-在宝塔面板上部署步骤：
+### 在宝塔面板上部署
 
 1. 上传项目代码到服务器
 2. 在宝塔面板中安装PM2管理器
 3. 创建新的Node.js项目，设置启动文件为`src/server.js`
 4. 确保创建并正确配置`.env`文件
 5. 启动项目
+
+### 在Vercel上部署（推荐）
+
+项目已配置好Vercel部署所需的文件，可以直接部署到Vercel平台：
+
+1. 将项目推送到GitHub仓库
+2. 在Vercel控制台导入GitHub仓库
+3. 设置环境变量：`GPT_API_KEY`和`GPT_API_URL`
+4. 点击部署
+
+详细的Vercel部署指南请参考项目中的`VERCEL_DEPLOYMENT_GUIDE.md`文件。
+
+### 部署到GitHub
+
+如果您想将项目部署到GitHub，请参考项目中的`GITHUB_DEPLOYMENT_GUIDE.md`文件，其中包含详细的步骤说明。
 
 ## 注意事项
 
@@ -170,4 +185,4 @@ callQwenAPI().then(data => console.log(data));
 
 ## 许可证
 
-ISC 
+ISC
