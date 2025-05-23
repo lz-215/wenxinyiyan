@@ -124,6 +124,38 @@ document.addEventListener('DOMContentLoaded', () => {
         setRandomUserAvatar();
     }
 
+    // 检查登录状态
+    function checkLoginStatus() {
+        const token = localStorage.getItem('token');
+        const googleId = localStorage.getItem('google_id');
+        
+        if (!token || !googleId) {
+            // 未登录时保存当前URL
+            localStorage.setItem('redirect_after_login', window.location.href);
+            window.location.href = '/';
+            return false;
+        }
+        return true;
+    }
+
+    // 在页面加载时检查登录状态
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!checkLoginStatus()) {
+            return;
+        }
+        
+        // 显示用户头像
+        const userPicture = localStorage.getItem('picture');
+        if (userPicture) {
+            const userAvatarImg = document.querySelector('.user-avatar img');
+            if (userAvatarImg) {
+                userAvatarImg.src = userPicture;
+            }
+        }
+        
+        // ...继续执行其他初始化代码...
+    });
+
     // 辅助函数：找到具有特定类名的父元素
     function findParentWithClass(element, className) {
         let parent = element.parentElement;

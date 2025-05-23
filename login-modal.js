@@ -1,162 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 获取DOM元素
-    const loginModal = document.getElementById('loginModal');
+    // 获取登录按钮
     const loginButtons = document.querySelectorAll('#loginButton');
-    const closeModalButton = document.getElementById('closeLoginModal');
-    const modalTabs = document.querySelectorAll('.modal-tab');
-    const phoneInput = document.getElementById('phoneInput');
-    const verificationInput = document.getElementById('verificationInput');
-    const sendVerificationBtn = document.getElementById('sendVerificationBtn');
-    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-    const consentCheckbox = document.getElementById('consentCheckbox');
-    const loginForm = document.getElementById('loginForm');
-
-    // 设置验证码倒计时的初始值
-    let countdownInterval = null;
-    let countdownTime = 60;
-
-    // 显示登录弹窗
-    function showLoginModal() {
-        loginModal.classList.add('active');
-        // 默认重置表单
-        resetForm();
-    }
-
-    // 隐藏登录弹窗
-    function hideLoginModal() {
-        loginModal.classList.remove('active');
-    }
-
-    // 重置表单
-    function resetForm() {
-        if (loginForm) {
-            loginForm.reset();
+    
+    // 获取主域名函数
+    const getMainDomain = () => {
+        const hostName = window.location.hostname;
+        
+        // 本地开发环境处理
+        if (!hostName || hostName === '' || hostName === 'localhost' || hostName === '127.0.0.1') {
+            // 本地开发时使用测试域名
+            return 'ehangsec.com';
         }
-        updateLoginButtonState();
-        stopCountdown();
-        if (sendVerificationBtn) {
-            sendVerificationBtn.textContent = 'Send code';
-            sendVerificationBtn.disabled = false;
+        
+        const parts = hostName.split('.');
+        if (parts.length > 2) {
+            return parts.slice(-2).join('.');
         }
-    }
+        return hostName;
+    };
 
-    // 监听登录按钮点击事件
+    // 处理谷歌登录
+    const handleGoogleLogin = () => {
+        const mainDomain = getMainDomain();
+        
+        // 获取当前完整 URL 作为回调
+        const currentUrl = window.location.href;
+        const callback = encodeURIComponent(currentUrl);
+        
+        // 保存当前 URL 用于登录后跳转回来
+        localStorage.setItem('redirect_after_login', currentUrl);
+        
+        // 构造登录 URL
+        const loginUrl = `https://aa.jstang.cn/google_login.php?url=${mainDomain}&redirect_uri=${callback}`;
+        console.log('Login URL:', loginUrl); // 添加调试日志
+        
+        // 跳转到登录页面
+        window.location.href = loginUrl;
+    };
+
+    // 检查登录状态
+    const checkLoginStatus = () => {
+        const url = window.location.href;
+        if (url.includes('google_id=')) {
+            const params = new URLSearchParams(url.split('?')[1]);
+            
+            // 提取 Google 用户信息
+            const googleId = params.get('google_id');
+            const name = params.get('name');
+            const email = params.get('email');
+            const picture = params.get('picture');
+            
+            console.log('Login response:', { googleId, name, email, picture }); // 添加调试日志
+            
+            if (!googleId || !name || !email) {
+                console.error('Missing required login information'); // 添加调试日志
+                alert('登录信息不完整，请重试');
+                return false;
+            }
+            
+            // 存储用户信息
+            try {
+                localStorage.setItem('google_id', googleId);
+                localStorage.setItem('name', name);
+                localStorage.setItem('email', email);
+                if (picture) localStorage.setItem('picture', picture);
+                
+                // 生成 token
+                const token = btoa(JSON.stringify({ googleId, name, email, picture }));
+                localStorage.setItem('token', token);
+                
+                // 清理 URL 参数
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+                
+                return true;
+            } catch (error) {
+                console.error('Error saving login information:', error); // 添加调试日志
+                alert('保存登录信息时出错，请确保浏览器允许保存数据');
+                return false;
+            }
+        }
+        return false;
+    };
+
+    // 给所有登录按钮添加点击事件
     loginButtons.forEach(button => {
-        // 移除所有现有的点击事件监听器（通过克隆和替换元素）
-        const newButton = button.cloneNode(true);
-        button.parentNode.replaceChild(newButton, button);
-
-        // 添加新的点击事件监听器
-        newButton.addEventListener('click', (e) => {
+        button.addEventListener('click', (e) => {
             e.preventDefault();
-            showLoginModal();
+            handleGoogleLogin();
         });
     });
 
-    // 监听关闭按钮点击事件
-    if (closeModalButton) {
-        closeModalButton.addEventListener('click', hideLoginModal);
-    }
-
-    // 点击模态框外部关闭模态框
-    if (loginModal) {
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                hideLoginModal();
-            }
-        });
-    }
-
-    // 标签切换功能
-    modalTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // 移除所有标签的active类
-            modalTabs.forEach(t => t.classList.remove('active'));
-            // 添加当前标签的active类
-            tab.classList.add('active');
-        });
-    });
-
-    // 启动倒计时
-    function startCountdown() {
-        if (sendVerificationBtn) {
-            sendVerificationBtn.disabled = true;
-            countdownTime = 60;
-            sendVerificationBtn.textContent = `Resend (${countdownTime}s)`;
-
-            countdownInterval = setInterval(() => {
-                countdownTime--;
-                if (countdownTime <= 0) {
-                    stopCountdown();
-                    return;
-                }
-                sendVerificationBtn.textContent = `Resend (${countdownTime}s)`;
-            }, 1000);
+    // 页面加载时检查登录状态
+    if (checkLoginStatus()) {
+        // 如果存在重定向 URL，跳转到该 URL
+        const redirectUrl = localStorage.getItem('redirect_after_login');
+        if (redirectUrl) {
+            localStorage.removeItem('redirect_after_login');
+            window.location.href = redirectUrl;
+        } else {
+            // 否则跳转到首页
+            window.location.href = '/';
         }
     }
-
-    // 停止倒计时
-    function stopCountdown() {
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
-
-        if (sendVerificationBtn) {
-            sendVerificationBtn.disabled = false;
-            sendVerificationBtn.textContent = 'Send code';
-        }
-    }
-
-    // 监听发送验证码按钮点击事件
-    if (sendVerificationBtn) {
-        sendVerificationBtn.addEventListener('click', () => {
-            if (!phoneInput.value.trim()) {
-                alert("Please enter your phone number");
-                return;
-            }
-
-            // 模拟发送验证码
-            alert("This feature is currently unavailable. In a real app, a verification code would be sent to your phone.");
-            startCountdown();
-        });
-    }
-
-    // 监听输入字段变化，更新登录按钮状态
-    if (phoneInput) {
-        phoneInput.addEventListener('input', updateLoginButtonState);
-    }
-
-    if (verificationInput) {
-        verificationInput.addEventListener('input', updateLoginButtonState);
-    }
-
-    if (consentCheckbox) {
-        consentCheckbox.addEventListener('change', updateLoginButtonState);
-    }
-
-    // 更新登录按钮状态
-    function updateLoginButtonState() {
-        if (loginSubmitBtn) {
-            const isPhoneValid = phoneInput && phoneInput.value.trim().length > 0;
-            const isVerificationValid = verificationInput && verificationInput.value.trim().length > 0;
-            const isConsentChecked = consentCheckbox && consentCheckbox.checked;
-
-            loginSubmitBtn.disabled = !(isPhoneValid && isVerificationValid && isConsentChecked);
-        }
-    }
-
-    // 监听登录表单提交事件
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // 模拟登录逻辑
-            alert("This feature is currently unavailable. In a real app, you would be logged in now.");
-            hideLoginModal();
-        });
-    }
-
-    // 初始化登录按钮状态
-    updateLoginButtonState();
 });
