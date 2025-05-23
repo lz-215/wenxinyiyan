@@ -5,358 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="GPT4.1 Free AI Assistant - Get intelligent responses to your questions powered by advanced language model without login requirements.">
     <meta name="keywords" content="GPT4.1, AI assistant chat, no login AI, AI, language model, AI communication">
-    <meta name="google-site-verification" content="xtMVfXot4viFkyWp0PwsT2JNbuflfnhDsfRQrthOz6o" />
-    <title>GPT4.1 Free AI Assistant (No Login Required)</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q83YN5TWCD"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-Q83YN5TWCD');
-    </script>
-    <link rel="stylesheet" href="index.css">
+    <title>GPT4.1 Free AI Assistant - Advanced AI Chat Assistant</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23007BFF'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-size='50' fill='%23FFD600' font-family='Arial' dy='.3em'%3E%E2%98%85%3C/text%3E%3C/svg%3E">
-    <script>
-        // 记录当前页面是首页
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                localStorage.setItem('lastPageVisited', 'index');
-                console.log('Set current page as index page');
-            } catch (e) {
-                console.error('Error recording current page:', e);
-            }
-        });
-    </script>
-    <style>
-        @keyframes cardFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #refresh-suggestions.rotating svg {
-            animation: rotate 0.5s ease-in-out;
-        }
-    </style>
 </head>
 <body>
     <header>
-        <a href="index.html" class="logo-link">
-            <div class="logo">
-                <img src="assets/images/chatgpt.png" alt="Logo" width="32" height="32">
-                <span>GPT4.1</span>
-            </div>
-        </a>
-        <button class="login-btn" id="loginButton">Login with Google</button>
+        <div class="logo">
+            <img src="assets/images/chatgpt.png" alt="Logo" width="32" height="32">
+            <span>GPT4.1</span>
+        </div>
+        <nav>
+            <button id="loginButton">Login with Google</button>
+        </nav>
     </header>
 
-    <div class="container">
-        <div class="chat-container">
-            <div class="avatar-container">
-                <div class="avatar">
-                    <img src="assets/images/chatgpt.png" alt="AI Avatar" width="32" height="32">
-                </div>
-            </div>
-            <main id="main">
-                <div class="intro">
-                    <div id="div.intro-content">
-                        <h2>Hello,</h2>
-                        <h2>I am GPT4.1</h2>
-                        <p>🚀 Latest model: GPT4.1 is faster and more intelligent, with enhanced capabilities and improved performance!</p>
-                        <p>As your AI assistant, I can write articles, generate ideas, answer your questions, and extend conversations.</p>
-                    </div>
-                    <div class="intro-suggestions-header">
-                        <h3>You can try asking me:</h3>
-                        <button id="refresh-suggestions">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                            </svg>
-                            Refresh
-                        </button>
-                    </div>
-                </div>
-                <div id="suggestion-grid" class="suggestion-grid">
-                    <!-- Visible suggestion cards will be populated here via JavaScript -->
-                </div>
-            </main>
+    <main>
+        <div class="intro-section">
+            <h1>GPT4.1 Free AI Assistant</h1>
+            <p>Experience our advanced AI assistant powered by state-of-the-art language models.</p>
+            <p>Start chatting without login. Login required after 10 messages.</p>
         </div>
-    </div>
 
-    <footer>
         <div class="input-container">
             <div class="input-area">
-                <textarea id="prompt-input" placeholder="Type your message here... Press Ctrl+Enter to send" rows="1"></textarea>
-                <button id="send-prompt">
+                <textarea id="userInput" placeholder="Type your message here... Press Ctrl+Enter to send" rows="1"></textarea>
+                <button id="sendButton" title="Send">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
                     </svg>
                 </button>
             </div>
         </div>
-        <div class="footer-content">
-            <p>Contact Us: ytsgabcde20@2925.com • 渝ICP备2023003198号-90</p>
-            <p>Content is AI-generated, accuracy and truthfulness cannot be guaranteed, for reference only • <a href="privacy-policy.html" style="color: #007bff; text-decoration: none;">Privacy Policy</a> </p>
+
+        <div class="suggestions-section">
+            <div class="suggestions-header">
+                <h2>Example Questions</h2>
+                <button id="refreshPrompts">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>
+                    Refresh Examples
+                </button>
+            </div>
+
+            <div class="suggestions-grid">
+                <!-- Example questions will be dynamically inserted here -->
+            </div>
         </div>
+    </main>
+
+    <footer>
+        <p>Content is AI-generated, accuracy and truthfulness cannot be guaranteed, for reference only • <a href="privacy-policy.html">Privacy Policy</a></p>
     </footer>
-
-    <!-- All suggestion cards stored here but not displayed directly -->
-    <div id="suggestion-card-pool" style="display: none;">
-        <div class="suggestion-card" data-topic="India-Pakistan Relations">
-            <h4>
-                <span class="card-icon">🌏</span>
-                India-Pakistan Relations
-            </h4>
-            <p>Have there been any new military confrontations or diplomatic incidents between India and Pakistan recently?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Military Technology">
-            <h4>
-                <span class="card-icon">🛡️</span>
-                Military Technology
-            </h4>
-            <p>Did India really successfully interfere with Pakistan's Chinese-made air defense systems, and how does this affect the regional military balance?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Ceasefire Analysis">
-            <h4>
-                <span class="card-icon">🕊️</span>
-                Ceasefire Analysis
-            </h4>
-            <p>How has the international community responded to the sudden ceasefire between India and Pakistan, and has this move truly sparked discontent among hardliners in India?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Global Trade Agreements">
-            <h4>
-                <span class="card-icon">🌐</span>
-                Global Trade Agreements
-            </h4>
-            <p>Which specific clauses in the new trade agreement between the US and UK have been labeled as "poison pills" by China, and how will this affect the global trade landscape?</p>
-        </div>
-        <div class="suggestion-card" data-topic="US-China Tariffs">
-            <h4>
-                <span class="card-icon">💰</span>
-                US-China Tariffs
-            </h4>
-            <p>What is the specific reduction in tariffs on small parcels from mainland China and Hong Kong by US President Trump, and what are the reasons behind it?</p>
-        </div>
-        <div class="suggestion-card" data-topic="US-China Trade Truce">
-            <h4>
-                <span class="card-icon">🤝</span>
-                US-China Trade Truce
-            </h4>
-            <p>What preliminary results or new negotiation focuses have emerged from the 90-day tariff truce between the US and China?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Middle East Diplomacy">
-            <h4>
-                <span class="card-icon">🕌</span>
-                Middle East Diplomacy
-            </h4>
-            <p>Which interim Syrian leader did former US President Trump meet in Saudi Arabia, and what key issues were discussed?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Qatar-US Economic Ties">
-            <h4>
-                <span class="card-icon">💼</span>
-                Qatar-US Economic Ties
-            </h4>
-            <p>Which industry sectors are the main focus of the $1.2 trillion economic cooperation agreement discussed during Trump's visit to Qatar?</p>
-        </div>
-        <div class="suggestion-card" data-topic="US Middle East Strategy">
-            <h4>
-                <span class="card-icon">🗺️</span>
-                US Middle East Strategy
-            </h4>
-            <p>Does this signal a new diplomatic strategy adjustment or policy priorities for the US in the Middle East region?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Russia-Ukraine Peace Talks">
-            <h4>
-                <span class="card-icon">☮️</span>
-                Russia-Ukraine Peace Talks
-            </h4>
-            <p>When are the direct peace negotiations between Russia and Ukraine to be hosted by Turkey expected to take place, and what are the main issues and expected outcomes?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Peace Mediation Efforts">
-            <h4>
-                <span class="card-icon">🕊️</span>
-                Peace Mediation Efforts
-            </h4>
-            <p>What is the international community's view on these mediation efforts for Russia-Ukraine peace talks, and which countries or organizations are involved?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Emerging AI Tools">
-            <h4>
-                <span class="card-icon">🤖</span>
-                Emerging AI Tools
-            </h4>
-            <p>In the field of artificial intelligence, besides voice removers and coding assistants, what emerging AI tools are showing explosive growth trends?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Language Models">
-            <h4>
-                <span class="card-icon">💬</span>
-                Language Models
-            </h4>
-            <p>What are the latest breakthroughs in large language models (like Claude AI, GPT series) in understanding complex instructions and multimodal interactions?</p>
-        </div>
-        <div class="suggestion-card" data-topic="AI Industry Trends">
-            <h4>
-                <span class="card-icon">📊</span>
-                AI Industry Trends
-            </h4>
-            <p>Do layoffs in AI departments by tech giants like Microsoft reflect industry bubbles or strategic adjustments, and how do they impact the AI talent market?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Quantum Computing">
-            <h4>
-                <span class="card-icon">⚛️</span>
-                Quantum Computing
-            </h4>
-            <p>Have there been any new prototype machines released in quantum computing or key progress made in solving practical problems?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Metaverse Development">
-            <h4>
-                <span class="card-icon">🌐</span>
-                Metaverse Development
-            </h4>
-            <p>What new platforms or case studies in metaverse technology for business applications and user experience will be worth attention in 2025?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Semiconductor Diversification">
-            <h4>
-                <span class="card-icon">🔌</span>
-                Semiconductor Diversification
-            </h4>
-            <p>Besides India's development plans, what are the latest trends in diversification and localization of global chip supply chains in the semiconductor industry?</p>
-        </div>
-        <div class="suggestion-card" data-topic="China's Chip Technology">
-            <h4>
-                <span class="card-icon">🖥️</span>
-                China's Chip Technology
-            </h4>
-            <p>What new progress has China made in overcoming bottlenecks in high-end chip manufacturing?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Commercial Space">
-            <h4>
-                <span class="card-icon">🛰️</span>
-                Commercial Space
-            </h4>
-            <p>How is the global coverage and competitive landscape for low-orbit satellite internet services like Starlink in the commercial space sector?</p>
-        </div>
-        <div class="suggestion-card" data-topic="Space Exploration">
-            <h4>
-                <span class="card-icon">🚀</span>
-                Space Exploration
-            </h4>
-            <p>What are the new dynamics in cooperation and competition among countries in space resource mining and space station construction?</p>
-        </div>
-    </div>
-
-    <script>
-        // 卡片随机展示功能
-        document.addEventListener('DOMContentLoaded', function() {
-            const suggestionGrid = document.getElementById('suggestion-grid');
-            const cardPool = document.getElementById('suggestion-card-pool');
-            const refreshButton = document.getElementById('refresh-suggestions');
-
-            // 获取所有卡片
-            const allCards = Array.from(cardPool.querySelectorAll('.suggestion-card'));
-
-            // 随机展示6个卡片函数
-            function displayRandomCards() {
-                // 清空当前显示的卡片
-                suggestionGrid.innerHTML = '';
-
-                // 淡出效果
-                suggestionGrid.style.opacity = '0';
-
-                setTimeout(() => {
-                    // 随机打乱所有卡片
-                    const shuffledCards = [...allCards].sort(() => Math.random() - 0.5);
-
-                    // 选择前6个并添加到网格
-                    shuffledCards.slice(0, 6).forEach((card, index) => {
-                        const clonedCard = card.cloneNode(true);
-
-                        // 添加动画效果
-                        clonedCard.style.animation = `cardFadeIn 0.3s ease forwards ${index * 0.05}s`;
-
-                        // 随机选择图标（从icon1.png到icon20.png）
-                        const randomIconNumber = Math.floor(Math.random() * 20) + 1;
-                        const iconElement = clonedCard.querySelector('.card-icon');
-
-                        // 替换emoji为图片
-                        if (iconElement) {
-                            iconElement.innerHTML = '';
-                            const iconImg = document.createElement('img');
-                            // 使用指定的图标路径
-                            iconImg.src = `assets/images/icon${randomIconNumber}.png`;
-                            iconImg.alt = 'Card Icon';
-                            // 不设置宽高，由CSS控制
-                            iconElement.appendChild(iconImg);
-                        }
-
-                        suggestionGrid.appendChild(clonedCard);
-
-                        // 添加点击事件
-                        clonedCard.addEventListener('click', function() {
-                            const question = clonedCard.querySelector('p').textContent;
-                            // 可以替换为实际的处理逻辑
-                            console.log('Selected question:', question);
-                            window.location.href = `chat.html?query=${encodeURIComponent(question)}`;
-                        });
-                    });
-
-                    // 淡入效果
-                    suggestionGrid.style.opacity = '1';
-                    suggestionGrid.style.transition = 'opacity 0.3s ease';
-                }, 200);
-            }
-
-            // 初始显示
-            displayRandomCards();
-
-            // 刷新按钮点击事件
-            if (refreshButton) {
-                refreshButton.addEventListener('click', function() {
-                    this.classList.add('rotating');
-                    setTimeout(() => {
-                        this.classList.remove('rotating');
-                    }, 500);
-                    displayRandomCards();
-                });
-            }
-
-            // 输入框自动调整高度
-            const promptInput = document.getElementById('prompt-input');
-            if (promptInput) {
-                promptInput.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                });
-            }
-
-            // 发送按钮点击事件
-            const sendButton = document.getElementById('send-prompt');
-            if (sendButton && promptInput) {
-                sendButton.addEventListener('click', function() {
-                    const message = promptInput.value.trim();
-                    if (message) {
-                        window.location.href = `chat.html?query=${encodeURIComponent(message)}`;
-                    }
-                });
-
-                // Ctrl+Enter 发送
-                promptInput.addEventListener('keydown', function(e) {
-                    if (e.ctrlKey && e.key === 'Enter') {
-                        e.preventDefault();
-                        const message = this.value.trim();
-                        if (message) {
-                            window.location.href = `chat.html?query=${encodeURIComponent(message)}`;
-                        }
-                    }
-                });
-            }
-        });
-    </script>
 
     <script src="script.js"></script>
     <script src="login-modal.js"></script>
@@ -366,20 +68,20 @@
         <div class="login-modal">
             <div class="modal-header">
                 <div class="modal-tabs">
-                    <div class="modal-tab active">登录</div>
+                    <div class="modal-tab active">Login</div>
                 </div>
                 <button class="close-modal" id="closeLoginModal">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="login-description">使用谷歌账号登录</p>
+                <p class="login-description">Login with Google Account</p>
                 <button type="button" class="google-login-button" id="googleLoginBtn">
                     <svg width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
-                        <path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09c1.97 3.92 6.02 6.62 10.71 6.62z"/>
-                        <path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29v-3.09h-3.98c-.8 1.61-1.27 3.41-1.27 5.38s.46 3.77 1.27 5.38l3.98-3.09z"/>
-                        <path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42c-2.07-1.94-4.78-3.13-8.02-3.13-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/>
+                        <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
+                        <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
+                        <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
+                        <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
                     </svg>
-                    使用 Google 账号登录
+                    <span>Login with Google</span>
                 </button>
             </div>
         </div>

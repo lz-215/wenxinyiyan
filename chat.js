@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 获取DOM元素
     const homeButton = document.getElementById('homeButton');
     const loginButton = document.getElementById('loginButton');
     const newChatButton = document.getElementById('newChatButton');
@@ -6,23 +7,82 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
     const responseText = document.getElementById('responseText');
     const userQuestion = document.getElementById('userQuestion');
-    const userAvatar = document.querySelector('.user-avatar img'); // 获取用户头像元素
-    const conversationContainer = document.querySelector('.conversation-container'); // 聊天容器
+    const userAvatar = document.querySelector('.user-avatar img');
+    const conversationContainer = document.querySelector('.conversation-container');
 
     // 用于存储聊天历史的数组
     let chatHistory = [];
 
     // 聊天状态存储的键
     const CHAT_STATE_KEY = 'chatState';
-    const USER_AVATAR_KEY = 'userAvatarPath'; // 保存用户头像路径的键
-    const NAV_STATE_KEY = 'navigationState'; // 导航状态的键
-    const LAST_PAGE_KEY = 'lastPageVisited'; // 上一个访问页面的键
+    const USER_AVATAR_KEY = 'userAvatarPath';
+    const NAV_STATE_KEY = 'navigationState';
+    const LAST_PAGE_KEY = 'lastPageVisited';
 
     // 控制API请求的变量
-    let currentApiController = null; // 当前API请求的AbortController
-    let isRequestPending = false; // 是否有请求正在进行中
-    let lastStoppedPrompt = null; // 保存被中断的请求的提示文本
-    let isContinueMode = false; // 是否处于继续回复模式
+    let currentApiController = null;
+    let isRequestPending = false;
+    let lastStoppedPrompt = null;
+    let isContinueMode = false;
+
+    // 检查并更新用户界面
+    const updateUserInterface = () => {
+        const isLoggedIn = localStorage.getItem('google_id');
+        if (isLoggedIn && loginButton) {
+            const userInfo = document.createElement('div');
+            userInfo.className = 'user-info-container';
+            
+            const userPicture = localStorage.getItem('picture');
+            const userName = localStorage.getItem('name');
+            const userEmail = localStorage.getItem('email');
+            
+            const userAvatar = document.createElement('img');
+            userAvatar.src = userPicture || 'assets/images/user.png';
+            userAvatar.className = 'user-avatar-button';
+            userAvatar.alt = 'User Avatar';
+            
+            const dropdownMenu = document.createElement('div');
+            dropdownMenu.className = 'dropdown-menu';
+            dropdownMenu.innerHTML = `
+                <div class="dropdown-item user-profile">
+                    <img src="${userPicture || 'assets/images/user.png'}" alt="User Avatar">
+                    <div class="user-details">
+                        <div class="user-name">${userName || 'User'}</div>
+                        <div class="user-email">${userEmail || ''}</div>
+                    </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item logout">Logout</div>
+            `;
+            
+            userInfo.appendChild(userAvatar);
+            userInfo.appendChild(dropdownMenu);
+            
+            loginButton.parentNode.replaceChild(userInfo, loginButton);
+            
+            userAvatar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+            
+            const logoutButton = dropdownMenu.querySelector('.logout');
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('google_id');
+                localStorage.removeItem('name');
+                localStorage.removeItem('email');
+                localStorage.removeItem('picture');
+                localStorage.removeItem('token');
+                window.location.reload();
+            });
+            
+            document.addEventListener('click', () => {
+                dropdownMenu.classList.remove('show');
+            });
+        }
+    };
+
+    // 在页面加载时检查登录状态并更新UI
+    updateUserInterface();
 
     // 记录当前页面为聊天页面
     try {
@@ -63,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const currentTime = Date.now();
                     const timeDifference = currentTime - timestamp;
 
-                    // 如果时间差小于60秒，认为是从首页通过后退按钮返回的
+                    // 如果时间差小于60秒，认为是从首页（通过后退按钮）返回的
                     // 并且上一个页面是首页（通过lastPageVisited检查）
                     if (timeDifference < 60000 && localStorage.getItem(LAST_PAGE_KEY) === 'index') {
                         console.log('User returned from home page using browser back button');
@@ -502,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 重置页面标题
         document.title = 'GPT4.1 Free AI Assistant (No Login Required)';
 
-        // 显示欢迎消息 - 使用已有的头像，不更改头像
+        // 显示欢迎消息
         const aiAvatarSrc = 'assets/images/chatgpt.png';
         const welcomeMessage = '<p>Welcome to GPT4.1 AI Assistant, please type your question below.</p>';
         appendMessageToDisplay(welcomeMessage, 'ai', aiAvatarSrc);
@@ -515,52 +575,28 @@ document.addEventListener('DOMContentLoaded', () => {
             timestamp: new Date().toISOString()
         });
 
-        // 清除URL中的query参数，但不刷新页面
-        if (window.history && window.history.replaceState) {
-            const newUrl = window.location.pathname;
-            window.history.replaceState({}, document.title, newUrl);
-        }
-
-        // 清除sessionStorage中的聊天状态
-        try {
-            sessionStorage.removeItem(CHAT_STATE_KEY);
-            sessionStorage.removeItem('lastUrlQuery');
-            // 注意：我们不移除USER_AVATAR_KEY，以保持头像不变
-        } catch (e) {
-            console.error('Error removing chat state:', e);
-        }
-
-        // 保存新的欢迎状态
+        // 保存聊天状态
         saveChatState();
 
         // 聚焦到输入框
         if (userInput) {
             userInput.focus();
         }
-
-        console.log('Chat cleared, new conversation started (avatar unchanged)');
     }
-
-    // 登录按钮点击事件已在login-modal.js中处理
-    // 这里不再添加额外的点击事件处理
 
     // 处理发送/停止/继续按钮
     if (sendButton && userInput) {
         sendButton.addEventListener('click', () => {
             if (isRequestPending) {
-                // 如果正在请求中，点击按钮应该停止请求
                 stopApiRequest();
             } else if (isContinueMode && lastStoppedPrompt) {
-                // 如果处于继续模式，且有上次中断的提示，则继续生成回复
                 console.log('Continuing response for prompt:', lastStoppedPrompt);
 
-                // 移除最后一条AI消息中的"已停止"提示
                 const aiMessages = conversationContainer.querySelectorAll('.ai-message-wrapper');
                 if (aiMessages.length > 0) {
                     const lastAiMessage = aiMessages[aiMessages.length - 1];
                     const contentDiv = lastAiMessage.querySelector('.message-content');
                     if (contentDiv && contentDiv.innerHTML.includes('Response generation stopped')) {
-                        // 替换为加载中提示
                         contentDiv.innerHTML = '<p class="api-placeholder">Continuing response...</p>';
 
                         // 从聊天历史中移除最后一条AI消息
@@ -588,14 +624,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         isError: true
                                     });
                                 } else {
-                                    // 获取原始响应文本
                                     const rawResponse = result.data?.text || 'Sorry, could not get a response';
-
-                                    // 显示格式化的响应
                                     const formattedResponse = formatAIResponse(rawResponse);
                                     contentDiv.innerHTML = formattedResponse;
 
-                                    // 将AI原始文本回复添加到聊天历史
                                     chatHistory.push({
                                         type: 'ai',
                                         text: rawResponse,
@@ -604,14 +636,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     });
                                 }
 
-                                // 重置继续模式和上次中断的提示
                                 isContinueMode = false;
                                 lastStoppedPrompt = null;
 
-                                // 保存聊天状态
+                                // 保存聊天状态并滚动到底部
                                 saveChatState();
-
-                                // 滚动到底部
                                 setTimeout(scrollToBottom, 100);
                             })
                             .catch(error => {
@@ -629,8 +658,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
 
                                 contentDiv.innerHTML = errorMessage;
-
-                                // 将错误信息添加到聊天历史
                                 chatHistory.push({
                                     type: 'ai',
                                     text: errorMessage,
@@ -639,7 +666,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     isError: true
                                 });
 
-                                // 保存聊天状态
                                 saveChatState();
                             });
                     }
@@ -649,535 +675,98 @@ document.addEventListener('DOMContentLoaded', () => {
                 const message = userInput.value.trim();
                 if (message) {
                     handleNewUserInput(message);
-                    userInput.value = '';  // 清空输入框
-                    autoResizeTextarea();  // 调整输入框大小
-                }
-            }
-        });
-
-        userInput.addEventListener('keydown', (event) => {
-            if (event.ctrlKey && event.key === 'Enter') {
-                event.preventDefault();
-                if (isRequestPending) {
-                    // 如果正在请求中，Ctrl+Enter 也应该停止请求
-                    stopApiRequest();
-                } else if (isContinueMode && lastStoppedPrompt) {
-                    // 触发点击事件，复用继续生成的逻辑
-                    sendButton.click();
-                } else {
-                    // 使用新的处理函数
-                    const message = userInput.value.trim();
-                    if (message) {
-                        handleNewUserInput(message);
-                        userInput.value = '';  // 清空输入框
-                        autoResizeTextarea();  // 调整输入框大小
-                    }
+                    userInput.value = '';
+                    autoResizeTextarea();
                 }
             }
         });
     }
 
-    // 函数：发送后续消息
-    function sendMessage() {
-        const message = userInput.value.trim();
-        if (message) {
-            // 获取用户头像路径
-            const userAvatarSrc = userAvatar ? userAvatar.src : 'assets/images/user.png';
+    // 更新UI元素的禁用状态
+    function updateUIDisabledState(disabled) {
+        if (userInput) {
+            userInput.disabled = disabled;
+            if (disabled) {
+                userInput.placeholder = 'You have reached the free chat limit (10 messages). Please login to continue.';
+            } else {
+                userInput.placeholder = 'Type your message here... Press Ctrl+Enter to send';
+            }
+        }
+        if (sendButton) {
+            sendButton.disabled = disabled;
+        }
+        if (newChatButton) {
+            newChatButton.disabled = disabled;
+        }
+    }
 
-            // 将用户消息添加到显示和历史
-            appendMessageToDisplay(message, 'user', userAvatarSrc);
-            chatHistory.push({
-                type: 'user',
-                text: message,
-                avatar: userAvatarSrc,
-                timestamp: new Date().toISOString()
-            });
-
-            // 添加AI响应"加载中"占位符
-            const aiAvatarSrc = 'assets/images/chatgpt.png';
-            const aiResponseElement = appendMessageToDisplay(
-                '<p class="api-placeholder">Loading response...</p>',
-                'ai',
-                aiAvatarSrc
-            );
-
-            // 设置为加载状态
-            updateSendButtonState(true);
-
-            // 调用API
-            callGPT41Api(message)
-                .then(result => {
-                    updateSendButtonState(false);
-
-                    if (result.success === false) {
-                        // 处理错误
-                        const errorMessage = `<div class="error-message">
-                            <p>Sorry, an error occurred: ${result.error}</p>
-                        </div>`;
-                        aiResponseElement.innerHTML = errorMessage;
-
-                        // 将错误消息添加到聊天历史
-                        chatHistory.push({
-                            type: 'ai',
-                            text: errorMessage,
-                            avatar: aiAvatarSrc,
-                            timestamp: new Date().toISOString(),
-                            isError: true
-                        });
-                    } else {
-                        // 获取原始响应文本
-                        const rawResponse = result.data?.text || 'Sorry, could not get a response';
-
-                        // 显示格式化的响应
-                        const formattedResponse = formatAIResponse(rawResponse);
-                        aiResponseElement.innerHTML = formattedResponse;
-
-                        // 将AI原始文本回复添加到聊天历史（这样在恢复时可以正确格式化）
-                        chatHistory.push({
-                            type: 'ai',
-                            text: rawResponse, // 存储原始文本而非格式化后的HTML
-                            avatar: aiAvatarSrc,
-                            timestamp: new Date().toISOString()
-                        });
-                    }
-
-                    // 更新页面标题
-                    let shortTitle = message.length > 50 ? message.substring(0, 50) + "..." : message;
-                    document.title = `${shortTitle} - GPT4.1 Free AI Assistant`;
-
-                    // 清空输入框并调整大小
-                    userInput.value = '';
-                    autoResizeTextarea();
-
-                    // 保存聊天状态
-                    saveChatState();
-                })
-                .catch(error => {
-                    let errorMessage;
-
-                    if (error.name === 'AbortError') {
-                        console.log('API request was aborted');
-                        errorMessage = '<p class="api-placeholder">Response generation stopped</p>';
-                        // 设置为继续模式
-                        updateSendButtonState(false, true);
-                    } else {
-                        console.error('Error processing message:', error);
-                        errorMessage = `<div class="error-message">
-                            <p>Error connecting to server. Please try again later.</p>
-                        </div>`;
-                        // 普通错误，恢复为发送模式
-                        updateSendButtonState(false);
-                    }
-
-                    aiResponseElement.innerHTML = errorMessage;
-
-                    // 将错误信息添加到聊天历史
-                    chatHistory.push({
-                        type: 'ai',
-                        text: errorMessage,
-                        avatar: aiAvatarSrc,
-                        timestamp: new Date().toISOString(),
-                        isError: true
-                    });
-
-                    // 清空输入框并调整大小
-                    userInput.value = '';
-                    autoResizeTextarea();
-
-                    // 保存聊天状态
-                    saveChatState();
-                });
+    // 检查是否需要禁用功能
+    function checkAndUpdateUIState() {
+        const chatCount = parseInt(localStorage.getItem('chat_count') || '0');
+        const isLoggedIn = localStorage.getItem('google_id');
+        
+        if (chatCount >= 10 && !isLoggedIn) {
+            updateUIDisabledState(true);
+            return false;
         } else {
-            userInput.classList.add('shake');
-            setTimeout(() => userInput.classList.remove('shake'), 500);
+            updateUIDisabledState(false);
+            return true;
         }
     }
 
-    // 格式化AI回复，将换行符转换为HTML换行
-    function formatAIResponse(text) {
-        if (!text) return '';
-
-        // 处理特定的章节标题
-        text = text.replace(/^\d+\.\s+(Sector-Specific Trends|City-Level Trends):?/gm,
-            '<div class="section-header">$1:</div>');
-
-        // 处理有序列表（数字后跟点和空格开头的行）
-        text = text.replace(/^\d+\.\s(.+)$/gm, '<li class="numbered-item">$1</li>');
-        text = text.replace(/(<li class="numbered-item">.*?<\/li>(\s*\n)?)+/gs, '<ol>$&</ol>');
-
-        // 修复嵌套列表问题 (移除嵌套的 ol 标签)
-        text = text.replace(/<ol>(\s*)<ol>/g, '<ol>$1');
-        text = text.replace(/<\/ol>(\s*)<\/ol>/g, '</ol>$1');
-
-        // 处理段落和换行
-        text = text.replace(/\n\n/g, '</p><p>');
-        text = text.replace(/\n/g, '<br>');
-
-        // 处理格式化标记
-        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // 粗体
-        text = text.replace(/_(.*?)_/g, '<em>$1</em>'); // 斜体
-
-        return text;
-    }
-
-    // 调用GPT4.1 API的函数
-    async function callGPT41Api(prompt) {
-        try {
-            console.log(`Calling GPT4.1 API with prompt: ${prompt}`);
-
-            // 创建一个新的AbortController实例，用于取消请求
-            currentApiController = new AbortController();
-            const signal = currentApiController.signal;
-
-            const response = await fetch('/api/qwen/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    prompt: prompt,
-                    options: {
-                        temperature: 0.7,
-                        max_tokens: 1500,
-                        top_p: 0.9
-                    }
-                }),
-                signal: signal // 传递信号给fetch，允许中断请求
-            });
-
-            // 请求完成后重置控制器
-            currentApiController = null;
-
-            console.log('API Response status:', response.status);
-
-            if (!response.ok) {
-                // Try to parse error message
-                let errorData;
-                try {
-                    errorData = await response.json();
-                    console.error('API error details:', errorData);
-                } catch (e) {
-                    console.error('Failed to parse error response:', e);
-                    // Ignore non-JSON responses
-                }
-                throw new Error(`HTTP Error! Status: ${response.status}${errorData && errorData.message ? ' - ' + errorData.message : ''}`);
-            }
-
-            const result = await response.json();
-            console.log('GPT4.1 API Response:', result);
-            return result;
-
-        } catch (error) {
-            // 如果是中断请求导致的错误，传递给调用者处理
-            if (error.name === 'AbortError') {
-                throw error;
-            }
-
-            console.error('Error calling GPT4.1 API:', error);
-            return {
-                success: false,
-                error: error.message || "Unable to connect to backend service. Please try again later."
-            };
-        }
-    }
+    // 页面加载时检查UI状态
+    checkAndUpdateUIState();
 
     // 设置发送按钮状态（发送/停止/继续）
     function updateSendButtonState(isLoading, isContinue = false) {
         isRequestPending = isLoading;
         isContinueMode = isContinue && !isLoading;
 
+        if (!sendButton) return;
+
         if (isLoading) {
-            // 变为停止按钮
-            sendButton.innerHTML = '■'; // 停止符号
+            // Change to stop button
+            sendButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M3.5 3.5h9v9h-9z"/>
+                </svg>
+            `;
             sendButton.title = 'Stop';
             sendButton.classList.add('stop-button');
             sendButton.classList.remove('continue-button');
         } else if (isContinue) {
-            // 变为继续按钮
-            sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
-            </svg>`; // 继续图标（播放按钮）
+            // Change to continue button
+            sendButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                </svg>
+            `;
             sendButton.title = 'Continue';
             sendButton.classList.remove('stop-button');
             sendButton.classList.add('continue-button');
         } else {
-            // 变回发送按钮
-            sendButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
-            </svg>`; // 发送图标
+            // Change back to send button
+            sendButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                </svg>
+            `;
             sendButton.title = 'Send';
-            sendButton.classList.remove('stop-button');
-            sendButton.classList.remove('continue-button');
+            sendButton.classList.remove('stop-button', 'continue-button');
         }
     }
 
-    // 停止当前API请求
+    // Stop current API request
     function stopApiRequest() {
         if (currentApiController) {
-            // 获取当前正在处理的最后一条用户消息
+            // Save current prompt
             const userMessages = chatHistory.filter(msg => msg.type === 'user');
             if (userMessages.length > 0) {
                 lastStoppedPrompt = userMessages[userMessages.length - 1].text;
-                console.log('Saved stopped prompt:', lastStoppedPrompt);
             }
-
-            currentApiController.abort(); // 中断请求
-            currentApiController = null;
-
-            // 更新按钮状态为"继续"模式
+            
+            currentApiController.abort();
             updateSendButtonState(false, true);
-        }
-    }
-
-    // 从sessionStorage加载聊天状态
-    function loadChatState() {
-        try {
-            const storedState = sessionStorage.getItem(CHAT_STATE_KEY);
-            if (storedState) {
-                const state = JSON.parse(storedState);
-
-                // 恢复聊天历史
-                chatHistory = state.chatHistory || [];
-
-                if (chatHistory.length > 0) {
-                    console.log('Rebuilding chat display with', chatHistory.length, 'messages');
-
-                    // 清空当前聊天容器（前面已经清空过一次，这里确保）
-                    if (conversationContainer) {
-                        conversationContainer.innerHTML = '';
-                    }
-
-                    // 关闭动画滚动效果，以避免中间消息的滚动
-                    conversationContainer.classList.remove('scroll-to-bottom');
-
-                    // 重建对话显示
-                    for (let i = 0; i < chatHistory.length; i++) {
-                        const message = chatHistory[i];
-                        const isLastMessage = i === chatHistory.length - 1;
-
-                        // 创建消息包装器
-                        const messageWrapper = document.createElement('div');
-                        messageWrapper.className = `message-wrapper ${message.type}-message-wrapper`;
-
-                        // 创建头像容器
-                        const avatarDiv = document.createElement('div');
-                        avatarDiv.className = `${message.type}-avatar`;
-
-                        // 创建头像图片
-                        const avatarImg = document.createElement('img');
-                        avatarImg.src = message.avatar;
-                        avatarImg.alt = message.type === 'user' ? 'User Avatar' : 'AI Avatar';
-                        avatarDiv.appendChild(avatarImg);
-
-                        // 创建消息容器
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = `message ${message.type}-message`;
-
-                        // 创建消息内容容器
-                        const contentDiv = document.createElement('div');
-                        contentDiv.className = 'message-content';
-
-                        // 根据消息类型处理内容
-                        if (message.type === 'ai') {
-                            // 确保AI回复的格式化一致
-                            contentDiv.innerHTML = formatAIResponse(message.text);
-                        } else {
-                            // 用户消息可以直接使用
-                            contentDiv.textContent = message.text;
-                        }
-
-                        // 组装消息
-                        messageDiv.appendChild(contentDiv);
-                        messageWrapper.appendChild(avatarDiv);
-                        messageWrapper.appendChild(messageDiv);
-
-                        // 添加到聊天容器
-                        conversationContainer.appendChild(messageWrapper);
-
-                        // 如果是最后一条消息，确保滚动到底部
-                        if (isLastMessage) {
-                            // 滚动到底部
-                            setTimeout(scrollToBottom, 100);
-                        }
-                    }
-                } else {
-                    console.log('Chat history was empty, not rebuilding display');
-                }
-
-                // 恢复输入框内容
-                if (userInput && state.userInput) {
-                    userInput.value = state.userInput;
-                    // 触发input事件以确保textarea高度正确调整
-                    userInput.dispatchEvent(new Event('input'));
-                }
-
-                // 恢复页面标题
-                if (state.pageTitle) {
-                    document.title = state.pageTitle;
-                }
-
-                console.log('Chat state loaded with', chatHistory.length, 'messages');
-                return chatHistory.length > 0; // 只有当实际有消息时才返回true
-            }
-        } catch (e) {
-            console.error('Error loading chat state from sessionStorage:', e);
-            // 如果解析失败，清除无效的状态
-            sessionStorage.removeItem(CHAT_STATE_KEY);
-        }
-        return false; // 没有加载状态或状态为空
-    }
-
-    // 保存聊天状态到sessionStorage
-    function saveChatState() {
-        const state = {
-            chatHistory: chatHistory,
-            userInput: userInput ? userInput.value : '',
-            pageTitle: document.title,
-        };
-        try {
-            sessionStorage.setItem(CHAT_STATE_KEY, JSON.stringify(state));
-            console.log('Chat state saved with', chatHistory.length, 'messages');
-        } catch (e) {
-            console.error('Error saving chat state to sessionStorage:', e);
-        }
-    }
-
-    // 处理用户直接输入的新查询
-    function handleNewUserInput(text) {
-        if (!text || text.trim() === '') return;
-
-        // 清除所有临时消息或未完成的用户消息
-        cleanupIncompleteMessages();
-
-        // 获取用户头像路径
-        const userAvatarSrc = userAvatar ? userAvatar.src : 'assets/images/user.png';
-
-        // 添加新的用户消息
-        appendMessageToDisplay(text, 'user', userAvatarSrc);
-
-        // 在聊天历史中记录用户消息
-        chatHistory.push({
-            type: 'user',
-            text: text,
-            avatar: userAvatarSrc,
-            timestamp: new Date().toISOString()
-        });
-
-        // 添加AI响应"加载中"占位符
-        const aiAvatarSrc = 'assets/images/chatgpt.png';
-        const aiResponseElement = appendMessageToDisplay(
-            '<p class="api-placeholder">Loading response...</p>',
-            'ai',
-            aiAvatarSrc
-        );
-
-        // 设置为加载状态
-        updateSendButtonState(true);
-
-        // 调用API获取回复
-        callGPT41Api(text)
-            .then(result => {
-                updateSendButtonState(false);
-
-                if (result.success === false) {
-                    // 处理错误
-                    const errorMessage = `<div class="error-message">
-                        <p>Sorry, an error occurred: ${result.error}</p>
-                    </div>`;
-                    aiResponseElement.innerHTML = errorMessage;
-
-                    // 将错误消息添加到聊天历史
-                    chatHistory.push({
-                        type: 'ai',
-                        text: errorMessage,
-                        avatar: aiAvatarSrc,
-                        timestamp: new Date().toISOString(),
-                        isError: true
-                    });
-                } else {
-                    // 获取原始响应文本
-                    const rawResponse = result.data?.text || 'Sorry, could not get a response';
-
-                    // 显示格式化的响应
-                    const formattedResponse = formatAIResponse(rawResponse);
-                    aiResponseElement.innerHTML = formattedResponse;
-
-                    // 将AI原始文本回复添加到聊天历史
-                    chatHistory.push({
-                        type: 'ai',
-                        text: rawResponse, // 存储原始文本而非格式化后的HTML
-                        avatar: aiAvatarSrc,
-                        timestamp: new Date().toISOString()
-                    });
-                }
-
-                // 更新页面标题
-                let shortTitle = text.length > 50 ? text.substring(0, 50) + "..." : text;
-                document.title = `${shortTitle} - GPT4.1 Free AI Assistant`;
-
-                // 保存聊天状态
-                saveChatState();
-
-                // 强制滚动到底部
-                setTimeout(scrollToBottom, 100);
-            })
-            .catch(error => {
-                let errorMessage;
-
-                if (error.name === 'AbortError') {
-                    console.log('API request was aborted');
-                    errorMessage = '<p class="api-placeholder">Response generation stopped</p>';
-                    // 设置为继续模式
-                    updateSendButtonState(false, true);
-                } else {
-                    console.error('Error processing message:', error);
-                    errorMessage = `<div class="error-message">
-                        <p>Error connecting to server. Please try again later.</p>
-                    </div>`;
-                    // 普通错误，恢复为发送模式
-                    updateSendButtonState(false);
-                }
-
-                aiResponseElement.innerHTML = errorMessage;
-
-                // 将错误信息添加到聊天历史
-                chatHistory.push({
-                    type: 'ai',
-                    text: errorMessage,
-                    avatar: aiAvatarSrc,
-                    timestamp: new Date().toISOString(),
-                    isError: true
-                });
-
-                // 保存聊天状态
-                saveChatState();
-
-                // 强制滚动到底部
-                setTimeout(scrollToBottom, 100);
-            });
-    }
-
-    // 清理可能存在的未完成消息或临时消息
-    function cleanupIncompleteMessages() {
-        // 1. 查找所有含有临时消息(.api-placeholder)的消息
-        const temporaryMessages = conversationContainer.querySelectorAll('.message-content .api-placeholder');
-        temporaryMessages.forEach(placeholder => {
-            const messageWrapper = findParentWithClass(placeholder, 'message-wrapper');
-            if (messageWrapper) {
-                // 找到了临时消息的包装元素，删除它
-                conversationContainer.removeChild(messageWrapper);
-            }
-        });
-
-        // 2. 检查最后一条消息是否为用户消息，如果是，则移除
-        const allMessages = conversationContainer.querySelectorAll('.message-wrapper');
-        if (allMessages.length > 0) {
-            const lastMessage = allMessages[allMessages.length - 1];
-            if (lastMessage.classList.contains('user-message-wrapper')) {
-                // 最后一条是用户消息，删除它以防止消息重叠
-                conversationContainer.removeChild(lastMessage);
-            }
         }
     }
 });

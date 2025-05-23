@@ -3,19 +3,19 @@ from openai import OpenAI
 
 try:
     client = OpenAI(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+        # If environment variable is not set, replace the following line with: api_key="sk-xxx" using your Alibaba Cloud API Key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
 
     completion = client.chat.completions.create(
-        model="qwen-plus",  # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen-plus",  # Model list: https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=[
             {'role': 'system', 'content': 'You are a helpful assistant.'},
-            {'role': 'user', 'content': '你是谁？'}
+            {'role': 'user', 'content': 'Who are you?'}
             ]
     )
     print(completion.choices[0].message.content)
 except Exception as e:
-    print(f"错误信息：{e}")
-    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+    print(f"Error message: {e}")
+    print("Please refer to documentation: https://help.aliyun.com/zh/model-studio/developer-reference/error-code")

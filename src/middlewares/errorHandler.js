@@ -1,20 +1,32 @@
 /**
- * 错误处理中间件
+ * Global error handler middleware
  */
 function errorHandler(err, req, res, next) {
-  console.error('服务器错误:', err.stack);
-  
-  // 设置默认状态码和错误消息
-  const statusCode = err.statusCode || 500;
-  const message = err.message || '服务器内部错误';
-  
-  // 返回错误响应
-  res.status(statusCode).json({
-    success: false,
-    message: message,
-    // 开发环境下返回详细错误堆栈，生产环境下不返回
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
+    console.error('Error:', err);
+
+    // Handle specific error types
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({
+            success: false,
+            message: 'Validation error',
+            error: err.message
+        });
+    }
+
+    if (err.name === 'UnauthorizedError') {
+        return res.status(401).json({
+            success: false,
+            message: 'Authentication error',
+            error: 'Invalid token or missing authentication'
+        });
+    }
+
+    // Default error response
+    return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: err.message || 'An unexpected error occurred'
+    });
 }
 
-module.exports = errorHandler; 
+module.exports = errorHandler;
