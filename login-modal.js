@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 获取登录按钮
     const loginButtons = document.querySelectorAll('#loginButton');
-    const loginModal = document.getElementById('loginModal');
-    const CHAT_COUNT_KEY = 'chat_count';
-    const MAX_FREE_CHATS = 10;
     
     // 获取主域名函数
     const getMainDomain = () => {
@@ -40,84 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = loginUrl;
     };
 
-    // 检查登录状态和对话次数
-    const checkLoginAndChatCount = () => {
-        const chatCount = parseInt(localStorage.getItem(CHAT_COUNT_KEY) || '0');
-        if (chatCount >= MAX_FREE_CHATS && !localStorage.getItem('google_id')) {
-            alert('You have reached the free chat limit. Please login to continue.');
-            handleGoogleLogin();
-            return false;
-        }
-        return true;
-    };
-
-    // 更新UI以显示用户信息
-    const updateUserInterface = () => {
-        const isLoggedIn = localStorage.getItem('google_id');
-        const loginButtons = document.querySelectorAll('#loginButton');
-        
-        loginButtons.forEach(button => {
-            if (isLoggedIn) {
-                // 创建用户头像和下拉菜单
-                const userInfo = document.createElement('div');
-                userInfo.className = 'user-info-container';
-                
-                const userAvatar = document.createElement('img');
-                userAvatar.src = localStorage.getItem('picture') || 'assets/images/user.png';
-                userAvatar.className = 'user-avatar-button';
-                userAvatar.alt = 'User Avatar';
-                
-                const dropdownMenu = document.createElement('div');
-                dropdownMenu.className = 'dropdown-menu';
-                dropdownMenu.innerHTML = `
-                    <div class="dropdown-item user-profile">
-                        <img src="${localStorage.getItem('picture') || 'assets/images/user.png'}" alt="User Avatar">
-                        <div class="user-details">
-                            <div class="user-name">${localStorage.getItem('name') || 'User'}</div>
-                            <div class="user-email">${localStorage.getItem('email') || ''}</div>
-                        </div>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-item logout">Logout</div>
-                `;
-                
-                userInfo.appendChild(userAvatar);
-                userInfo.appendChild(dropdownMenu);
-                
-                // 替换登录按钮
-                button.parentNode.replaceChild(userInfo, button);
-                
-                // 添加点击事件处理
-                userAvatar.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdownMenu.classList.toggle('show');
-                });
-                
-                // 处理退出登录
-                const logoutButton = dropdownMenu.querySelector('.logout');
-                logoutButton.addEventListener('click', () => {
-                    localStorage.removeItem('google_id');
-                    localStorage.removeItem('name');
-                    localStorage.removeItem('email');
-                    localStorage.removeItem('picture');
-                    localStorage.removeItem('token');
-                    window.location.reload();
-                });
-                
-                // 点击其他地方关闭下拉菜单
-                document.addEventListener('click', () => {
-                    dropdownMenu.classList.remove('show');
-                });
-            }
-        });
-    };
-
-    // 增加对话计数
-    const incrementChatCount = () => {
-        const currentCount = parseInt(localStorage.getItem(CHAT_COUNT_KEY) || '0');
-        localStorage.setItem(CHAT_COUNT_KEY, (currentCount + 1).toString());
-    };
-
     // 检查登录状态
     const checkLoginStatus = () => {
         const url = window.location.href;
@@ -132,8 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log('Login response:', { googleId, name, email, picture }); // 添加调试日志
             
+            // 更新错误提示
             if (!googleId || !name || !email) {
-                alert('Login information is incomplete. Please try again.');
+                console.error('Missing required login information');
+                alert('Login information incomplete, please try again');
                 return false;
             }
             
@@ -152,15 +74,76 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
                 
-                updateUserInterface();
                 return true;
             } catch (error) {
-                console.error('Error saving login information:', error); // 添加调试日志
-                alert('Error saving login information. Please ensure browser allows data storage.');
+                console.error('Error saving login information:', error);
+                alert('Error saving login data, please make sure browser allows data storage');
                 return false;
             }
         }
         return false;
+    };
+
+    // 更新用户界面显示
+    const updateUserInterface = () => {
+        const loginButton = document.querySelector('#loginButton');
+        const token = localStorage.getItem('token');
+        const picture = localStorage.getItem('picture');
+        
+        if (token && loginButton) {
+            // 创建用户头像元素
+            const userProfileDiv = document.createElement('div');
+            userProfileDiv.className = 'user-profile';
+            userProfileDiv.innerHTML = `
+                <img src="${picture || 'assets/images/avatar/user1.png'}" alt="User Avatar" class="user-avatar">
+                <div class="user-dropdown">
+                    <div class="dropdown-item view-profile">View Profile</div>
+                    <div class="dropdown-item logout">Sign Out</div>
+                </div>
+            `;
+            
+            // 替换登录按钮
+            loginButton.parentNode.replaceChild(userProfileDiv, loginButton);
+            
+            // 添加下拉菜单事件
+            const dropdown = userProfileDiv.querySelector('.user-dropdown');
+            userProfileDiv.addEventListener('click', () => {
+                dropdown.classList.toggle('show');
+            });
+            
+            // 添加退出登录事件
+            const logoutButton = userProfileDiv.querySelector('.logout');
+            logoutButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                localStorage.clear();
+                window.location.reload();
+            });
+            
+            // 添加查看个人信息事件
+            const viewProfileButton = userProfileDiv.querySelector('.view-profile');
+            viewProfileButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const name = localStorage.getItem('name');
+                const email = localStorage.getItem('email');
+                alert(`Name: ${name}\nEmail: ${email}`);
+            });
+            
+            // 点击其他地方关闭下拉菜单
+            document.addEventListener('click', (e) => {
+                if (!userProfileDiv.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+    };
+
+    // 在登录成功后更新界面
+    const handleLoginSuccess = () => {
+        updateUserInterface();
+        const modal = document.getElementById('loginModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
     };
 
     // 给所有登录按钮添加点击事件
@@ -173,17 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 页面加载时检查登录状态
     if (checkLoginStatus()) {
-        // 如果存在重定向 URL，跳转到该 URL
-        const redirectUrl = localStorage.getItem('redirect_after_login');
-        if (redirectUrl) {
-            localStorage.removeItem('redirect_after_login');
-            window.location.href = redirectUrl;
-        }
-    } else {
-        updateUserInterface(); // 确保UI反映当前登录状态
+        handleLoginSuccess();
     }
-
-    // 导出必要的函数供其他模块使用
-    window.checkLoginAndChatCount = checkLoginAndChatCount;
-    window.incrementChatCount = incrementChatCount;
 });

@@ -2,24 +2,24 @@ const axios = require('axios');
 const config = require('../config');
 
 /**
- * Call Qwen API
- * @param {string} prompt - User input prompt
- * @param {object} options - Optional parameters like temperature, max tokens etc.
- * @returns {Promise<object>} - API response
+ * 调用通义千问API
+ * @param {string} prompt - 用户输入的提示
+ * @param {object} options - 可选参数，如温度、最大token数等
+ * @returns {Promise<object>} - API响应
  */
 async function callQwenApi(prompt, options = {}) {
-  // Default parameters
+  // 默认参数
   const defaultOptions = {
     temperature: 0.7,
     max_tokens: 1500,
     top_p: 0.9
   };
   
-  // Merge default parameters and user parameters
+  // 合并默认参数和用户参数
   const params = { ...defaultOptions, ...options };
   
   try {
-    // Build request body
+    // 构建请求体
     const requestBody = {
       model: config.qwen.model,
       input: {
@@ -34,10 +34,10 @@ async function callQwenApi(prompt, options = {}) {
       }
     };
     
-    console.log('Calling Qwen API, URL:', config.qwen.apiUrl);
-    console.log('Request body:', JSON.stringify(requestBody, null, 2));
+    console.log('请求通义千问API，URL:', config.qwen.apiUrl);
+    console.log('请求体:', JSON.stringify(requestBody, null, 2));
     
-    // Send request to Qwen API
+    // 发送请求到通义千问API
     const response = await axios.post(
       config.qwen.apiUrl,
       requestBody,
@@ -49,15 +49,15 @@ async function callQwenApi(prompt, options = {}) {
       }
     );
     
-    console.log('API response status:', response.status);
-    console.log('API response data:', JSON.stringify(response.data, null, 2));
-
-    // Ensure correct response structure
+    console.log('API响应状态:', response.status);
+    console.log('API响应数据:', JSON.stringify(response.data, null, 2));
+    
+    // 确保返回数据结构正确
     if (response.data && response.data.output) {
-      // Already in correct structure
+      // 已经具有正确的结构
       return response.data;
     } else if (response.data && response.data.choices && response.data.choices.length > 0) {
-      // Convert alternative API structure to expected format
+      // 可能是另一种API结构，转换为期望的格式
       return {
         output: {
           finish_reason: response.data.choices[0].finish_reason || "stop",
@@ -65,20 +65,19 @@ async function callQwenApi(prompt, options = {}) {
         }
       };
     } else {
-      // Return original structure if unrecognized
+      // 无法识别的结构，原样返回
       return response.data;
     }
-
   } catch (error) {
-    // Catch and handle errors
-    console.error('Error calling Qwen API:', error.message);
+    // 捕获并处理错误
+    console.error('调用通义千问API时出错:', error.message);
     if (error.response) {
-      console.error('API error details:', error.response.data);
+      console.error('API错误详情:', error.response.data);
       return { error: error.response.data, status: error.response.status };
     }
-    console.error('Full error:', error);
+    console.error('完整错误:', error);
     return { error: error.message };
   }
 }
 
-module.exports = { callQwenApi };
+module.exports = { callQwenApi }; 

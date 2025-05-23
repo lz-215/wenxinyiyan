@@ -150,7 +150,13 @@ header nav button#homeButton {
 }
 
 header nav button#homeButton:hover {
-    background-color: var(--secondary-color);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 /* Main Content Area */
@@ -1065,118 +1071,4 @@ main {
 .google-login-button svg {
     margin-right: 12px;
     flex-shrink: 0;
-}
-
-/* 用户信息容器 */
-.user-info-container {
-    position: relative;
-    display: inline-block;
-}
-
-.user-avatar-button {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.user-avatar-button:hover {
-    transform: scale(1.1);
-}
-
-/* 下拉菜单 */
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    min-width: 200px;
-    display: none;
-    z-index: 1000;
-    margin-top: 8px;
-}
-
-.dropdown-menu.show {
-    display: block;
-}
-
-/* 用户资料部分 */
-.user-profile {
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.user-details {
-    flex: 1;
-}
-
-.user-name {
-    font-weight: 500;
-    color: #333;
-}
-
-.user-email {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 4px;
-}
-
-/* 分隔线 */
-.dropdown-divider {
-    height: 1px;
-    background-color: #eee;
-    margin: 8px 0;
-}
-
-/* 下拉菜单项 */
-.dropdown-item {
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-.dropdown-item:not(.user-profile):hover {
-    background-color: #f5f5f5;
-}
-
-.dropdown-item.logout {
-    color: #dc3545;
-}
-
-/* 禁用状态的样式 */
-.input-area textarea:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    color: #666;
-}
-
-.input-container button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    animation: none;
-}
-
-.input-container button:disabled:hover {
-    background-color: #ccc;
-}
-
-#newChatButton:disabled {
-    background-color: #f5f5f5;
-    color: #999;
-    border-color: #ddd;
-    cursor: not-allowed;
-}
-
-#newChatButton:disabled:hover {
-    background-color: #f5f5f5;
 }

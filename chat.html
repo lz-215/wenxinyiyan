@@ -27,7 +27,7 @@
                 <span>GPT4.1</span>
             </div>
         </a>
-        <nav>
+        <nav class="nav-buttons">
             <button id="homeButton">Home</button>
             <button id="loginButton">Login with Google</button>
         </nav>
@@ -57,6 +57,7 @@
                     <div class="message ai-message">
                         <div id="responseText" class="message-content">
                             <p class="api-placeholder">Loading response...</p>
+                            <p class="api-placeholder">In a production environment, this would display the AI-generated response based on your query.</p>
                         </div>
                     </div>
                 </div>
@@ -76,6 +77,7 @@
             </div>
         </div>
         <div class="site-footer">
+            <p>Contact Us: ytsgabcde20@2925.com • 渝ICP备2023003198号-90</p>
             <p>Content is AI-generated, accuracy and truthfulness cannot be guaranteed, for reference only • <a href="privacy-policy.html" style="color: #007bff; text-decoration: none;">Privacy Policy</a></p>
         </div>
     </footer>
@@ -88,20 +90,20 @@
         <div class="login-modal">
             <div class="modal-header">
                 <div class="modal-tabs">
-                    <div class="modal-tab active">Login</div>
+                    <div class="modal-tab active">Sign In</div>
                 </div>
                 <button class="close-modal" id="closeLoginModal">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="login-description">Login with Google Account</p>
+                <p class="login-description">Sign in with Google account</p>
                 <button type="button" class="google-login-button" id="googleLoginBtn">
                     <svg width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
-                        <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
-                        <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
-                        <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
+                        <path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+                        <path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09c1.97 3.92 6.02 6.62 10.71 6.62z"/>
+                        <path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29v-3.09h-3.98c-.8 1.61-1.27 3.41-1.27 5.38s.46 3.77 1.27 5.38l3.98-3.09z"/>
+                        <path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42c-2.07-1.94-4.78-3.13-8.02-3.13-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/>
                     </svg>
-                    <span>Login with Google</span>
+                    Sign in with Google
                 </button>
             </div>
         </div>

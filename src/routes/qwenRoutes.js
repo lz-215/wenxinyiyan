@@ -3,7 +3,7 @@ const { chatCompletion } = require('../controllers/qwenController');
 
 const router = express.Router();
 
-// POST /api/qwen/chat - Chat endpoint for AI interaction
+// POST /api/qwen/chat - 聊天接口
 router.post('/chat', chatCompletion);
 
-module.exports = router;
+module.exports = router; 

@@ -80,16 +80,22 @@ header .logo::before {
     margin-right: 8px;
 }
 
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 header nav button {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 6px 14px;
-    border-radius: 18px;
+    padding: 8px 20px;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 14px;
     font-weight: 500;
-    transition: all var(--transition-speed) ease;
+    transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -663,6 +669,74 @@ main {
     100% { opacity: 0.6; }
 }
 
+/* 用户头像和下拉菜单样式 */
+.user-profile {
+    position: relative;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #4285f4;
+    transition: transform 0.2s ease;
+}
+
+.user-profile:hover .user-avatar {
+    transform: scale(1.05);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 8px 0;
+    margin-top: 8px;
+    min-width: 150px;
+    display: none;
+    z-index: 1000;
+}
+
+.user-dropdown.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    color: #333;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-item.logout {
+    color: #dc3545;
+    border-top: 1px solid #eee;
+    margin-top: 4px;
+    padding-top: 12px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     body {
@@ -916,4 +990,4 @@ main {
         opacity: 1;
         transform: translateY(0);
     }
-} 
+}
